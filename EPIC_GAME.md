@@ -23,7 +23,7 @@
 
 Приложение случайно выбирает слова из словаря.
 
-Эта пачка используется на протяжении всей игры и всех раундов.
+Эта пачка используется на протяжenne всей игры и всех раундов.
 
 ---
 
@@ -372,3 +372,61 @@ guessed     — угадано (исключается до следующего
 * затем всё повторяется в следующем раунде.
 
 ---
+
+## 21. Implementation Plan
+
+### Data Models
+
+#### Word
+Represents a single word in the game with its state.
+
+#### Team
+Represents a team with their score.
+
+#### GameSettings
+Configuration settings for a game session.
+
+#### GameState
+Current state of the game including teams, words, and current turn.
+
+### Core Logic
+
+#### GameManager
+Main class responsible for game logic:
+- Starting a new game
+- Managing turns
+- Handling word states
+- Calculating scores
+- Moving between rounds
+
+#### WordDictionary
+Manages the collection of available words and selection of word batches.
+
+#### GamePersistence
+Handles saving/loading game state to/from storage.
+
+### UI Components
+
+#### HomeScreen
+Start a new game or continue existing one.
+
+#### SetupScreen
+Configure game settings.
+
+#### GameScreen
+Main gameplay screen showing current word and timer.
+
+#### SummaryScreen
+Display round/team results.
+
+#### FinalScreen
+Show final results and winner.
+
+### Next Steps
+
+1. Create data models
+2. Implement WordDictionary
+3. Build GameManager logic
+4. Create persistence layer
+5. Design UI screens
+6. Connect everything together
