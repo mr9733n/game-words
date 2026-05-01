@@ -13,12 +13,13 @@ fun SetupScreen(
     onSettingsConfirmed: (GameSettings) -> Unit,
     onBackClicked: () -> Unit
 ) {
-    var bulkSize by remember { mutableStateOf(60) }
+    var bulkSize by remember { mutableStateOf(40) }
     var teamCount by remember { mutableStateOf(2) }
     var roundCount by remember { mutableStateOf(4) }
     var turnDuration by remember { mutableStateOf(60) }
     
-    val bulkSizeOptions = listOf(40, 60, 80, 100)
+    // val bulkSizeOptions = listOf(40, 60, 80, 100)
+    val bulkSizeOptions = listOf(10, 20, 30, 40) // Test
     
     Column(
         modifier = Modifier

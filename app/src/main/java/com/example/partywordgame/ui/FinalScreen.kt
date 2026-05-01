@@ -15,8 +15,10 @@ fun FinalScreen(
     onPlayAgain: () -> Unit,
     onExit: () -> Unit
 ) {
-    val winningTeamIndex = gameState.teams.indices.maxByOrNull { gameState.teams[it].score }
-    val isTie = gameState.teams.distinctBy { it.score }.size < gameState.teams.size
+    val maxScore = gameState.teams.maxOfOrNull { it.score } ?: 0
+    val winners = gameState.teams.withIndex().filter { it.value.score == maxScore }
+    val isTie = winners.size > 1
+    val winningTeamIndex = winners.firstOrNull()?.index
     
     Column(
         modifier = Modifier

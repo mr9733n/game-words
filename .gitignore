@@ -1,2 +1,6 @@
 .aider*
 /.idea
+/.gradle
+/app/build
+*.zip
+/obsolete

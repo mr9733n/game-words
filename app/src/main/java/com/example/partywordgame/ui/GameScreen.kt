@@ -22,7 +22,6 @@ fun GameScreen(
     onNextWord: () -> Unit,
     onPause: () -> Unit
 ) {
-    val currentTeam = gameState.teams[gameState.current.teamIndex]
     val currentWord = gameState.wordBulk[gameState.current.wordIndex]
     
     Column(
@@ -70,26 +69,25 @@ fun GameScreen(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.weight(1f)
         ) {
-            // Show either the word or a start button
-            if (currentWord.state == WordState.IN_TURN || currentWord.state == WordState.GUESSED) {
-                Text(
-                    text = currentWord.text,
-                    style = MaterialTheme.typography.h3,
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            } else {
+            if (!isTimerRunning) {
                 Button(
                     onClick = onStartTurn,
                     modifier = Modifier.padding(bottom = 16.dp)
                 ) {
                     Text("Start Turn")
                 }
+            } else {
+                Text(
+                    text = currentWord.text,
+                    style = MaterialTheme.typography.h3,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
         
         // Action buttons
-        if (currentWord.state == WordState.IN_TURN) {
+        if (isTimerRunning && currentWord.state == WordState.IN_TURN) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
