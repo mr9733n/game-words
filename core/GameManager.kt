@@ -175,20 +175,17 @@ class GameManager {
             return startingIndex
         }
         
-        // If only one word available, return its index
-        if (availableIndices.size == 1) {
-            return availableIndices[0]
+        // Shuffle the available indices to ensure randomness
+        val shuffledIndices = availableIndices.shuffled()
+        
+        // Find the first available index that is different from current (if possible)
+        val differentIndex = shuffledIndices.firstOrNull { it != startingIndex }
+        if (differentIndex != null) {
+            return differentIndex
         }
         
-        // Find indices after the starting position
-        val afterStarting = availableIndices.filter { it > startingIndex }
-        if (afterStarting.isNotEmpty()) {
-            // Return the next available word after starting position
-            return afterStarting.minOrNull() ?: startingIndex
-        } else {
-            // Wrap around to beginning and find first available
-            return availableIndices.minOrNull() ?: startingIndex
-        }
+        // If all available words are the same as current, just return any available
+        return shuffledIndices.first()
     }
     
     /**
