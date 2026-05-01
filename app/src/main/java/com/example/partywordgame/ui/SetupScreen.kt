@@ -57,7 +57,7 @@ fun SetupScreen(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { if (teamCount > 2) teamCount-- }) {
+                IconButton(onClick = { if (teamCount > 1) teamCount-- }) {
                     Text("-", style = MaterialTheme.typography.h6)
                 }
                 Text(
@@ -65,7 +65,7 @@ fun SetupScreen(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     style = MaterialTheme.typography.h6
                 )
-                IconButton(onClick = { if (teamCount < 6) teamCount++ }) {
+                IconButton(onClick = { if (teamCount < 8) teamCount++ }) {
                     Text("+", style = MaterialTheme.typography.h6)
                 }
             }
@@ -109,7 +109,7 @@ fun SetupScreen(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     style = MaterialTheme.typography.h6
                 )
-                IconButton(onClick = { if (turnDuration <= 120) turnDuration += 10 }) {
+                IconButton(onClick = { if (turnDuration <= 180) turnDuration += 10 }) {
                     Text("+", style = MaterialTheme.typography.h6)
                 }
             }
@@ -130,14 +130,17 @@ fun SetupScreen(
             
             Button(
                 onClick = {
-                    onSettingsConfirmed(
-                        GameSettings(
-                            bulkSize = bulkSize,
-                            teamCount = teamCount,
-                            roundCount = roundCount,
-                            turnDurationSeconds = turnDuration
+                    // Validate settings before confirming
+                    if (bulkSize >= 20 && teamCount >= 1 && roundCount >= 1 && turnDuration >= 10) {
+                        onSettingsConfirmed(
+                            GameSettings(
+                                bulkSize = bulkSize,
+                                teamCount = teamCount,
+                                roundCount = roundCount,
+                                turnDurationSeconds = turnDuration
+                            )
                         )
-                    )
+                    }
                 },
                 modifier = Modifier.padding(start = 8.dp)
             ) {

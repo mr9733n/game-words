@@ -1,6 +1,6 @@
 # Gradle Wrapper Fix Instructions
 
-The Gradle wrapper error occurs because the gradle-wrapper.jar file is missing. To fix this:
+The Gradle wrapper error occurs because the gradle-wrapper.jar file is missing or corrupted. To fix this:
 
 ## Option 1: Regenerate Gradle Wrapper (Recommended)
 1. Delete the gradle directory in your project if it exists
