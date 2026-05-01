@@ -14,6 +14,7 @@ fun PartyWordGameApp(
     val gameState = viewModel.gameState.collectAsState().value
     val timeLeft = viewModel.timeLeft.collectAsState().value
     val isTimerRunning = viewModel.isTimerRunning.collectAsState().value
+    val currentMode = viewModel.currentMode.collectAsState().value
 
     when (screenState) {
         ScreenState.HOME -> HomeScreen(
@@ -24,6 +25,7 @@ fun PartyWordGameApp(
         )
 
         ScreenState.SETTINGS -> SettingsScreen(
+            currentMode = currentMode,
             onBackClicked = { viewModel.showHomeScreen() },
             onResetStateClicked = { viewModel.resetSavedState() },
             onClearActiveWordsClicked = { viewModel.clearActiveWords() },
@@ -32,6 +34,7 @@ fun PartyWordGameApp(
         )
 
         ScreenState.SETUP -> SetupScreen(
+            currentMode = currentMode,
             onSettingsConfirmed = { viewModel.startNewGame(it) },
             onBackClicked = { viewModel.showHomeScreen() }
         )

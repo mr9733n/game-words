@@ -9,9 +9,12 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.ButtonDefaults
+import com.example.partywordgame.models.GameMode
 
 @Composable
 fun SettingsScreen(
+    currentMode: GameMode,
     onBackClicked: () -> Unit,
     onResetStateClicked: () -> Unit,
     onClearActiveWordsClicked: () -> Unit,
@@ -56,14 +59,26 @@ fun SettingsScreen(
 
             Button(
                 onClick = onTestModeClicked,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = if (currentMode == GameMode.TEST)
+                        MaterialTheme.colors.primary
+                    else
+                        MaterialTheme.colors.surface
+                )
             ) {
                 Text("Test Mode")
             }
 
             Button(
                 onClick = onGameModeClicked,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = if (currentMode == GameMode.NORMAL)
+                        MaterialTheme.colors.primary
+                    else
+                        MaterialTheme.colors.surface
+                )
             ) {
                 Text("Game Mode")
             }

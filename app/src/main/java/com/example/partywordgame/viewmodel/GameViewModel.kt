@@ -12,7 +12,6 @@ import com.example.partywordgame.persistence.GamePersistence
 import com.example.partywordgame.persistence.GamePersistenceImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class GameViewModel(application: Application) : AndroidViewModel(application) {
@@ -34,7 +33,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private var timerJob: kotlinx.coroutines.Job? = null
 
     private val _currentMode = MutableStateFlow(GameMode.NORMAL)
-    val currentMode = _currentMode.asStateFlow()
+    val currentMode: StateFlow<GameMode> = _currentMode
 
     init {
         viewModelScope.launch {
@@ -176,6 +175,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
         val currentWordIndex = currentState.current.wordIndex
         val currentTeamIndex = currentState.current.teamIndex
+        val skippedIds = currentState.current.skippedWordIdsInTurn
 
         val updatedTeams = currentState.teams.toMutableList().apply {
             this[currentTeamIndex] = this[currentTeamIndex].copy(
@@ -190,40 +190,69 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             )
         }
 
-        val skippedIds = currentState.current.skippedWordIdsInTurn
+        val allWordsGuessed = updatedWords.all {
+            it.state == WordState.GUESSED
+        }
+
+        if (allWordsGuessed) {
+            val roundFinishedState = currentState.copy(
+                teams = updatedTeams,
+                wordBulk = updatedWords,
+                current = currentState.current.copy(
+                    skippedWordIdsInTurn = emptySet()
+                )
+            )
+
+            _gameState.value = roundFinishedState
+            stopTimer()
+            _screenState.value = ScreenState.SUMMARY
+
+            viewModelScope.launch {
+                persistence.saveGameState(roundFinishedState)
+            }
+
+            return
+        }
 
         val nextWordIndex = updatedWords.indexOfFirst {
             it.state != WordState.GUESSED && it.id !in skippedIds
         }
 
-        val newState = if (nextWordIndex == -1) {
-            currentState.copy(
+        if (nextWordIndex == -1) {
+            val noWordsLeftForThisTurnState = currentState.copy(
                 teams = updatedTeams,
-                wordBulk = updatedWords
-            )
-        } else {
-            val finalWords = updatedWords.toMutableList().apply {
-                this[nextWordIndex] = this[nextWordIndex].copy(
-                    state = WordState.IN_TURN
-                )
-            }
-
-            currentState.copy(
-                teams = updatedTeams,
-                wordBulk = finalWords,
+                wordBulk = updatedWords,
                 current = currentState.current.copy(
-                    wordIndex = nextWordIndex,
                     skippedWordIdsInTurn = skippedIds
                 )
             )
+
+            _gameState.value = noWordsLeftForThisTurnState
+
+            viewModelScope.launch {
+                persistence.saveGameState(noWordsLeftForThisTurnState)
+            }
+
+            finishCurrentTurn()
+            return
         }
+
+        val finalWords = updatedWords.toMutableList().apply {
+            this[nextWordIndex] = this[nextWordIndex].copy(
+                state = WordState.IN_TURN
+            )
+        }
+
+        val newState = currentState.copy(
+            teams = updatedTeams,
+            wordBulk = finalWords,
+            current = currentState.current.copy(
+                wordIndex = nextWordIndex,
+                skippedWordIdsInTurn = skippedIds
+            )
+        )
 
         _gameState.value = newState
-
-        if (newState.wordBulk.all { it.state == WordState.GUESSED }) {
-            stopTimer()
-            _screenState.value = ScreenState.SUMMARY
-        }
 
         viewModelScope.launch {
             persistence.saveGameState(newState)

@@ -40,19 +40,20 @@ fun GameScreen(
         ) {
             Text(
                 text = "Round ${gameState.current.round}",
-                style = MaterialTheme.typography.h6
+                style = MaterialTheme.typography.h3
             )
             
             Text(
                 text = "Team ${gameState.current.teamIndex + 1}",
-                style = MaterialTheme.typography.h6,
+                style = MaterialTheme.typography.h4,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 4.dp)
             )
             
             Text(
                 text = getRoundRule(gameState.current.round),
-                style = MaterialTheme.typography.caption,
+                style = MaterialTheme.typography.h5,
+                fontSize = 22.sp,
                 modifier = Modifier.padding(top = 4.dp)
             )
 

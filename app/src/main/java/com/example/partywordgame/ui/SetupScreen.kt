@@ -7,9 +7,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.partywordgame.models.GameSettings
+import com.example.partywordgame.models.GameMode
 
 @Composable
 fun SetupScreen(
+    currentMode: GameMode,
     onSettingsConfirmed: (GameSettings) -> Unit,
     onBackClicked: () -> Unit
 ) {
@@ -18,8 +20,9 @@ fun SetupScreen(
     var roundCount by remember { mutableStateOf(4) }
     var turnDuration by remember { mutableStateOf(60) }
     
-    // val bulkSizeOptions = listOf(40, 60, 80, 100)
-    val bulkSizeOptions = listOf(10, 20, 30, 40) // Test
+    val bulkSizeOptions = listOf(40, 60, 80, 100)
+    // val bulkSizeOptions = listOf(10, 20, 30, 40) // Test
+    val isTestMode = currentMode == GameMode.TEST
     
     Column(
         modifier = Modifier
@@ -28,90 +31,93 @@ fun SetupScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
+
         Text(
-            text = "Game Setup",
+            text = if (isTestMode) "Testing Mode" else "Game Setup",
             style = MaterialTheme.typography.h5,
             modifier = Modifier.padding(bottom = 32.dp)
         )
-        
-        // Bulk Size Selector
-        SettingRow(
-            label = "Word Bulk Size",
-            modifier = Modifier.padding(vertical = 8.dp)
-        ) {
-            Row {
-                bulkSizeOptions.forEach { size ->
-                    RadioButton(
-                        selected = bulkSize == size,
-                        onClick = { bulkSize = size }
+
+        if (!isTestMode) {
+            // Bulk Size Selector
+            SettingRow(
+                label = "Word Bulk Size",
+                modifier = Modifier.padding(vertical = 8.dp)
+            ) {
+                Row {
+                    bulkSizeOptions.forEach { size ->
+                        RadioButton(
+                            selected = bulkSize == size,
+                            onClick = { bulkSize = size }
+                        )
+                        Text(text = size.toString(), modifier = Modifier.padding(end = 16.dp))
+                    }
+                }
+            }
+
+            // Team Count Selector
+            SettingRow(
+                label = "Number of Teams",
+                modifier = Modifier.padding(vertical = 8.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(onClick = { if (teamCount > 1) teamCount-- }) {
+                        Text("-", style = MaterialTheme.typography.h6)
+                    }
+                    Text(
+                        text = teamCount.toString(),
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        style = MaterialTheme.typography.h6
                     )
-                    Text(text = size.toString(), modifier = Modifier.padding(end = 16.dp))
+                    IconButton(onClick = { if (teamCount < 8) teamCount++ }) {
+                        Text("+", style = MaterialTheme.typography.h6)
+                    }
                 }
             }
-        }
-        
-        // Team Count Selector
-        SettingRow(
-            label = "Number of Teams",
-            modifier = Modifier.padding(vertical = 8.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+
+            // Round Count Selector
+            SettingRow(
+                label = "Number of Rounds",
+                modifier = Modifier.padding(vertical = 8.dp)
             ) {
-                IconButton(onClick = { if (teamCount > 1) teamCount-- }) {
-                    Text("-", style = MaterialTheme.typography.h6)
-                }
-                Text(
-                    text = teamCount.toString(),
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    style = MaterialTheme.typography.h6
-                )
-                IconButton(onClick = { if (teamCount < 8) teamCount++ }) {
-                    Text("+", style = MaterialTheme.typography.h6)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(onClick = { if (roundCount > 1) roundCount-- }) {
+                        Text("-", style = MaterialTheme.typography.h6)
+                    }
+                    Text(
+                        text = roundCount.toString(),
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        style = MaterialTheme.typography.h6
+                    )
+                    IconButton(onClick = { if (roundCount < 6) roundCount++ }) {
+                        Text("+", style = MaterialTheme.typography.h6)
+                    }
                 }
             }
-        }
-        
-        // Round Count Selector
-        SettingRow(
-            label = "Number of Rounds",
-            modifier = Modifier.padding(vertical = 8.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+
+            // Turn Duration Selector
+            SettingRow(
+                label = "Turn Duration (seconds)",
+                modifier = Modifier.padding(vertical = 8.dp)
             ) {
-                IconButton(onClick = { if (roundCount > 1) roundCount-- }) {
-                    Text("-", style = MaterialTheme.typography.h6)
-                }
-                Text(
-                    text = roundCount.toString(),
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    style = MaterialTheme.typography.h6
-                )
-                IconButton(onClick = { if (roundCount < 6) roundCount++ }) {
-                    Text("+", style = MaterialTheme.typography.h6)
-                }
-            }
-        }
-        
-        // Turn Duration Selector
-        SettingRow(
-            label = "Turn Duration (seconds)",
-            modifier = Modifier.padding(vertical = 8.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = { if (turnDuration >= 30) turnDuration -= 10 }) {
-                    Text("-", style = MaterialTheme.typography.h6)
-                }
-                Text(
-                    text = turnDuration.toString(),
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    style = MaterialTheme.typography.h6
-                )
-                IconButton(onClick = { if (turnDuration <= 180) turnDuration += 10 }) {
-                    Text("+", style = MaterialTheme.typography.h6)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(onClick = { if (turnDuration >= 30) turnDuration -= 10 }) {
+                        Text("-", style = MaterialTheme.typography.h6)
+                    }
+                    Text(
+                        text = turnDuration.toString(),
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        style = MaterialTheme.typography.h6
+                    )
+                    IconButton(onClick = { if (turnDuration <= 180) turnDuration += 10 }) {
+                        Text("+", style = MaterialTheme.typography.h6)
+                    }
                 }
             }
         }
@@ -128,20 +134,26 @@ fun SetupScreen(
             ) {
                 Text("Back")
             }
-            
+
             Button(
                 onClick = {
-                    // Validate settings before confirming
-                    if (bulkSize >= 20 && teamCount >= 1 && roundCount >= 1 && turnDuration >= 10) {
-                        onSettingsConfirmed(
-                            GameSettings(
-                                bulkSize = bulkSize,
-                                teamCount = teamCount,
-                                roundCount = roundCount,
-                                turnDurationSeconds = turnDuration
-                            )
+                    val settings = if (isTestMode) {
+                        GameSettings(
+                            bulkSize = 5,
+                            teamCount = 2,
+                            roundCount = 2,
+                            turnDurationSeconds = 15
+                        )
+                    } else {
+                        GameSettings(
+                            bulkSize = bulkSize,
+                            teamCount = teamCount,
+                            roundCount = roundCount,
+                            turnDurationSeconds = turnDuration
                         )
                     }
+
+                    onSettingsConfirmed(settings)
                 },
                 modifier = Modifier.padding(start = 8.dp)
             ) {
