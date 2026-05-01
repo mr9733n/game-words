@@ -71,19 +71,31 @@ fun GameScreen(
             modifier = Modifier.weight(1f)
         ) {
             // Show either the word or a start button
-            if (currentWord.state == WordState.IN_TURN || currentWord.state == WordState.GUESSED) {
-                Text(
-                    text = currentWord.text,
-                    style = MaterialTheme.typography.h3,
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            } else {
-                Button(
-                    onClick = onStartTurn,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                ) {
-                    Text("Start Turn")
+            when (currentWord.state) {
+                WordState.IN_TURN -> {
+                    Text(
+                        text = currentWord.text,
+                        style = MaterialTheme.typography.h3,
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                WordState.GUESSED -> {
+                    Text(
+                        text = currentWord.text,
+                        style = MaterialTheme.typography.h3,
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colors.primary
+                    )
+                }
+                WordState.AVAILABLE -> {
+                    Button(
+                        onClick = onStartTurn,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    ) {
+                        Text("Start Turn")
+                    }
                 }
             }
         }
