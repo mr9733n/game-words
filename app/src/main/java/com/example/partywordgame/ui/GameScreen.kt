@@ -20,7 +20,9 @@ fun GameScreen(
     onGuessed: () -> Unit,
     onNotGuessed: () -> Unit,
     onNextWord: () -> Unit,
-    onPause: () -> Unit
+    onPause: () -> Unit,
+    onRestartRound: () -> Unit,
+    onRestartGame: () -> Unit
 ) {
     val currentWord = gameState.wordBulk[gameState.current.wordIndex]
     
@@ -53,11 +55,17 @@ fun GameScreen(
                 style = MaterialTheme.typography.caption,
                 modifier = Modifier.padding(top = 4.dp)
             )
-            
+
             // Timer display
+            val timerColor = if (timeLeft <= 10) {
+                MaterialTheme.colors.error
+            } else {
+                MaterialTheme.colors.onBackground
+            }
             Text(
                 text = formatTime(timeLeft),
-                style = MaterialTheme.typography.h4,
+                color = timerColor,
+                style = MaterialTheme.typography.h1,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(vertical = 16.dp)
             )
@@ -132,10 +140,28 @@ fun GameScreen(
                     onClick = onPause,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 16.dp),
+                        .padding(top = 46.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
                 ) {
                     Text("Pause", color = MaterialTheme.colors.onError)
+                }
+
+                OutlinedButton(
+                    onClick = onRestartRound,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                ) {
+                    Text("Restart Round")
+                }
+
+                OutlinedButton(
+                    onClick = onRestartGame,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                ) {
+                    Text("Restart Game")
                 }
             }
         }

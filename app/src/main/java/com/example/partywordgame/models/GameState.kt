@@ -14,11 +14,17 @@ data class GameState(
 data class CurrentTurn(
     val round: Int,
     val teamIndex: Int,
-    val wordIndex: Int
+    val wordIndex: Int,
+    val skippedWordIdsInTurn: Set<String> = emptySet()
 )
 
 enum class GameStatus {
     SETUP,
     ACTIVE,
     FINISHED
+}
+
+enum class GameMode {
+    TEST,
+    NORMAL
 }

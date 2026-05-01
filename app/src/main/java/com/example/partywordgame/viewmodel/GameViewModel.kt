@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.partywordgame.core.GameManager
+import com.example.partywordgame.models.GameMode
 import com.example.partywordgame.models.GameSettings
 import com.example.partywordgame.models.GameState
 import com.example.partywordgame.models.WordState
@@ -11,6 +12,7 @@ import com.example.partywordgame.persistence.GamePersistence
 import com.example.partywordgame.persistence.GamePersistenceImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class GameViewModel(application: Application) : AndroidViewModel(application) {
@@ -30,7 +32,10 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     val isTimerRunning: StateFlow<Boolean> = _isTimerRunning
     
     private var timerJob: kotlinx.coroutines.Job? = null
-    
+
+    private val _currentMode = MutableStateFlow(GameMode.NORMAL)
+    val currentMode = _currentMode.asStateFlow()
+
     init {
         viewModelScope.launch {
             loadSavedGame()
@@ -40,29 +45,74 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     fun showHomeScreen() {
         _screenState.value = ScreenState.HOME
     }
+
+    fun showSettingsScreen() {
+        _screenState.value = ScreenState.SETTINGS
+    }
+
+    fun resetSavedState() {
+        viewModelScope.launch {
+            persistence.clearGameState()
+            _gameState.value = null
+            _screenState.value = ScreenState.HOME
+        }
+    }
+
+    fun clearActiveWords() {
+        viewModelScope.launch {
+            val activeWords = persistence.getActiveWords()
+            persistence.removeActiveWords(activeWords)
+        }
+    }
+
+    fun setTestMode() {
+        _currentMode.value = GameMode.TEST
+    }
+
+    fun setGameMode() {
+        _currentMode.value = GameMode.NORMAL
+    }
     
     fun showSetupScreen() {
         _screenState.value = ScreenState.SETUP
     }
-    
+
     fun startNewGame(settings: GameSettings) {
         viewModelScope.launch {
             try {
-                // val activeWords = persistence.getActiveWords()
-                val activeWords = emptySet<String>()
-                val gameState = gameManager.startNewGame(settings, activeWords)
+                val mode = _currentMode.value
+
+                val effectiveSettings = when (mode) {
+                    GameMode.TEST -> settings.copy(
+                        bulkSize = 5,
+                        teamCount = 2,
+                        roundCount = 2,
+                        turnDurationSeconds = 15
+                    )
+
+                    GameMode.NORMAL -> settings
+                }
+
+                val activeWords = when (mode) {
+                    GameMode.TEST -> emptySet()
+                    GameMode.NORMAL -> persistence.getActiveWords()
+                }
+
+                val gameState = gameManager.startNewGame(effectiveSettings, activeWords)
+
                 _gameState.value = gameState
-                
-                // Add words to active words set
-                val wordSetText = gameState.wordBulk.map { it.text }.toSet()
-                // persistence.addActiveWords(wordSetText)
-                persistence.saveGameState(gameState)
-                
+
+                if (mode == GameMode.NORMAL) {
+                    val wordSetText = gameState.wordBulk.map { it.text }.toSet()
+                    persistence.addActiveWords(wordSetText)
+                    persistence.saveGameState(gameState)
+                }
+
                 _screenState.value = ScreenState.GAME
                 resetTimer(gameState.settings.turnDurationSeconds)
+
             } catch (e: Exception) {
-                // Handle insufficient words exception
-                // In a real app, we would show a dialog to the user
+                e.printStackTrace()
             }
         }
     }
@@ -106,7 +156,10 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
         val updatedState = currentState.copy(
             wordBulk = updatedWords,
-            current = currentState.current.copy(wordIndex = wordIndex)
+            current = currentState.current.copy(
+                wordIndex = wordIndex,
+                skippedWordIdsInTurn = emptySet()
+            )
         )
 
         _gameState.value = updatedState
@@ -126,7 +179,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
         val updatedTeams = currentState.teams.toMutableList().apply {
             this[currentTeamIndex] = this[currentTeamIndex].copy(
-                score = this[currentTeamIndex].score + 1
+                score = this[currentTeamIndex].score + 1,
+                roundScore = this[currentTeamIndex].roundScore + 1
             )
         }
 
@@ -136,8 +190,10 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             )
         }
 
+        val skippedIds = currentState.current.skippedWordIdsInTurn
+
         val nextWordIndex = updatedWords.indexOfFirst {
-            it.state != WordState.GUESSED
+            it.state != WordState.GUESSED && it.id !in skippedIds
         }
 
         val newState = if (nextWordIndex == -1) {
@@ -156,7 +212,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                 teams = updatedTeams,
                 wordBulk = finalWords,
                 current = currentState.current.copy(
-                    wordIndex = nextWordIndex
+                    wordIndex = nextWordIndex,
+                    skippedWordIdsInTurn = skippedIds
                 )
             )
         }
@@ -209,7 +266,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         val resetTeams = currentState.teams.map {
-            it.copy(score = 0)
+            it.copy(score = 0, roundScore = 0)
         }
 
         val newState = currentState.copy(
@@ -252,7 +309,13 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         if (cleanedWords.all { it.state == WordState.GUESSED }) {
-            val roundFinishedState = currentState.copy(wordBulk = cleanedWords)
+            val roundFinishedState = currentState.copy(
+                wordBulk = cleanedWords,
+                current = currentState.current.copy(
+                    skippedWordIdsInTurn = emptySet()
+                )
+            )
+
             _gameState.value = roundFinishedState
             _screenState.value = ScreenState.SUMMARY
 
@@ -272,7 +335,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             wordBulk = cleanedWords,
             current = currentState.current.copy(
                 teamIndex = nextTeamIndex,
-                wordIndex = nextWordIndex
+                wordIndex = nextWordIndex,
+                skippedWordIdsInTurn = emptySet()
             )
         )
 
@@ -305,16 +369,21 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             return
         }
 
-        val minScore = currentState.teams.minOf { it.score }
+        val minRoundScore = currentState.teams.minOf { it.roundScore }
         val nextRoundStartingTeamIndex = currentState.teams.indexOfFirst {
-            it.score == minScore
+            it.roundScore == minRoundScore
         }
 
         val resetWords = currentState.wordBulk.map {
             it.copy(state = WordState.AVAILABLE)
         }
 
+        val resetTeams = currentState.teams.map {
+            it.copy(roundScore = 0)
+        }
+
         val newState = currentState.copy(
+            teams = resetTeams,
             wordBulk = resetWords,
             current = currentState.current.copy(
                 round = currentState.current.round + 1,
@@ -336,26 +405,55 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         val currentState = _gameState.value ?: return
 
         val currentWordIndex = currentState.current.wordIndex
+        val currentWord = currentState.wordBulk[currentWordIndex]
+
+        val skippedIds = currentState.current.skippedWordIdsInTurn + currentWord.id
 
         val updatedWords = currentState.wordBulk.toMutableList().apply {
-            this[currentWordIndex] = this[currentWordIndex].copy(state = WordState.AVAILABLE)
+            this[currentWordIndex] = this[currentWordIndex].copy(
+                state = WordState.AVAILABLE
+            )
         }
 
         val nextWordIndex = updatedWords
             .mapIndexedNotNull { index, word ->
-                if (word.state != WordState.GUESSED && index != currentWordIndex) index else null
+                if (
+                    word.state != WordState.GUESSED &&
+                    word.id !in skippedIds &&
+                    index != currentWordIndex
+                ) index else null
             }
             .randomOrNull()
-            ?: currentWordIndex
+
+        if (nextWordIndex == null) {
+            val newState = currentState.copy(
+                wordBulk = updatedWords,
+                current = currentState.current.copy(
+                    skippedWordIdsInTurn = skippedIds
+                )
+            )
+
+            _gameState.value = newState
+
+            viewModelScope.launch {
+                persistence.saveGameState(newState)
+            }
+
+            finishCurrentTurn()
+            return
+        }
 
         val finalWords = updatedWords.toMutableList().apply {
-            this[nextWordIndex] = this[nextWordIndex].copy(state = WordState.IN_TURN)
+            this[nextWordIndex] = this[nextWordIndex].copy(
+                state = WordState.IN_TURN
+            )
         }
 
         val newState = currentState.copy(
             wordBulk = finalWords,
             current = currentState.current.copy(
-                wordIndex = nextWordIndex
+                wordIndex = nextWordIndex,
+                skippedWordIdsInTurn = skippedIds
             )
         )
 

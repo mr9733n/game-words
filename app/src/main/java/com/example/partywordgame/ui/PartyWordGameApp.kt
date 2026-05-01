@@ -19,7 +19,16 @@ fun PartyWordGameApp(
         ScreenState.HOME -> HomeScreen(
             onNewGameClick = { viewModel.showSetupScreen() },
             onResumeGameClick = { viewModel.resumeGame() },
+            onSettingsClick = { viewModel.showSettingsScreen() },
             isResumeEnabled = viewModel.canResumeGame()
+        )
+
+        ScreenState.SETTINGS -> SettingsScreen(
+            onBackClicked = { viewModel.showHomeScreen() },
+            onResetStateClicked = { viewModel.resetSavedState() },
+            onClearActiveWordsClicked = { viewModel.clearActiveWords() },
+            onTestModeClicked = { viewModel.setTestMode() },
+            onGameModeClicked = { viewModel.setGameMode() }
         )
 
         ScreenState.SETUP -> SetupScreen(
@@ -37,7 +46,9 @@ fun PartyWordGameApp(
                     onGuessed = { viewModel.markWordAsGuessed() },
                     onNotGuessed = { viewModel.skipWord() },
                     onNextWord = { viewModel.skipWord() },
-                    onPause = { viewModel.pauseGame() }
+                    onPause = { viewModel.pauseGame() },
+                    onRestartRound = { viewModel.restartRound() },
+                    onRestartGame = { viewModel.restartGame() }
                 )
             }
         }

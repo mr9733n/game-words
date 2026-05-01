@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 fun HomeScreen(
     onNewGameClick: () -> Unit,
     onResumeGameClick: () -> Unit,
+    onSettingsClick: () -> Unit,
     isResumeEnabled: Boolean
 ) {
     Column(
@@ -43,6 +44,15 @@ fun HomeScreen(
                 .padding(vertical = 8.dp)
         ) {
             Text("Resume Game")
+        }
+
+        Button(
+            onClick = onSettingsClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        ) {
+            Text("Settings")
         }
     }
 }

@@ -9,5 +9,5 @@ data class Word(
 enum class WordState {
     AVAILABLE,
     IN_TURN,
-    GUESSED
+    GUESSED,
 }
