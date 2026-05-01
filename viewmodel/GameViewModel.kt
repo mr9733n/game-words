@@ -131,6 +131,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                     
                     viewModelScope.launch {
                         persistence.saveGameState(newState)
+                        resetTimer(newState.settings.turnDurationSeconds)
                     }
                 }
             } else {

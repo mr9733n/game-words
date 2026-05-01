@@ -106,12 +106,15 @@ class GameManager {
             it.copy(state = WordState.AVAILABLE) 
         }
         
+        // Find the first available word index for the new round
+        val firstWordIndex = resetWords.indexOfFirst { it.state == WordState.AVAILABLE }
+        
         gameState = currentState.copy(
             wordBulk = resetWords,
             current = currentState.current.copy(
                 round = nextRound,
                 teamIndex = 0,
-                wordIndex = 0
+                wordIndex = if (firstWordIndex >= 0) firstWordIndex else 0
             )
         )
         
