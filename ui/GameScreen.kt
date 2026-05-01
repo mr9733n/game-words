@@ -55,6 +55,13 @@ fun GameScreen(
                 modifier = Modifier.padding(top = 4.dp)
             )
             
+            // Progress indicator
+            Text(
+                text = "${gameState.wordBulk.count { it.state == WordState.GUESSED }} / ${gameState.wordBulk.size} words guessed",
+                style = MaterialTheme.typography.caption,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+            
             // Timer display
             Text(
                 text = formatTime(timeLeft),
