@@ -165,27 +165,30 @@ class GameManager {
      * Finds the next available word that hasn't been guessed yet
      */
     private fun findNextAvailableWordIndex(startingIndex: Int, words: List<Word>): Int {
-        // Create a list of available word indices
+        // Get all available (non-guessed) word indices
         val availableIndices = words.mapIndexedNotNull { index, word -> 
             if (word.state != WordState.GUESSED) index else null 
-        }
+        }.toList()
         
         // If no available words, return starting index
         if (availableIndices.isEmpty()) {
             return startingIndex
         }
         
-        // Shuffle the available indices to ensure randomness
-        val shuffledIndices = availableIndices.shuffled()
-        
-        // Find the first available index that is different from current (if possible)
-        val differentIndex = shuffledIndices.firstOrNull { it != startingIndex }
-        if (differentIndex != null) {
-            return differentIndex
+        // If only one word left, return its index
+        if (availableIndices.size == 1) {
+            return availableIndices[0]
         }
         
-        // If all available words are the same as current, just return any available
-        return shuffledIndices.first()
+        // Try to find a word that's different from the current one
+        val differentIndices = availableIndices.filter { it != startingIndex }
+        if (differentIndices.isNotEmpty()) {
+            // Return a random different index
+            return differentIndices.random()
+        }
+        
+        // If we only have the current word available, return it
+        return availableIndices.random()
     }
     
     /**
