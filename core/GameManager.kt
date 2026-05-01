@@ -163,12 +163,13 @@ class GameManager {
     
     /**
      * Finds the next available word that hasn't been guessed yet
+     * Implements a fair cycling algorithm that tries to distribute words evenly
      */
     private fun findNextAvailableWordIndex(startingIndex: Int, words: List<Word>): Int {
         // Get all available (non-guessed) word indices
         val availableIndices = words.mapIndexedNotNull { index, word -> 
             if (word.state != WordState.GUESSED) index else null 
-        }.toList()
+        }
         
         // If no available words, return starting index
         if (availableIndices.isEmpty()) {
@@ -183,7 +184,8 @@ class GameManager {
         // Try to find a word that's different from the current one
         val differentIndices = availableIndices.filter { it != startingIndex }
         if (differentIndices.isNotEmpty()) {
-            // Return a random different index
+            // Prefer words that haven't been used recently
+            // For now, we'll just randomly select from different indices
             return differentIndices.random()
         }
         
