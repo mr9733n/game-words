@@ -1,6 +1,7 @@
 package com.example.partywordgame.core
 
 import com.example.partywordgame.models.*
+import kotlin.random.Random
 
 class GameManager {
     private var gameState: GameState? = null
@@ -164,22 +165,30 @@ class GameManager {
      * Finds the next available word that hasn't been guessed yet
      */
     private fun findNextAvailableWordIndex(startingIndex: Int, words: List<Word>): Int {
-        // Try to find the next non-guessed word after the current index
-        for (i in startingIndex + 1 until words.size) {
-            if (words[i].state != WordState.GUESSED) {
-                return i
-            }
+        // Create a list of available word indices
+        val availableIndices = words.mapIndexedNotNull { index, word -> 
+            if (word.state != WordState.GUESSED) index else null 
         }
         
-        // If not found, loop back to the beginning
-        for (i in 0 until startingIndex) {
-            if (words[i].state != WordState.GUESSED) {
-                return i
-            }
+        // If no available words, return starting index
+        if (availableIndices.isEmpty()) {
+            return startingIndex
         }
         
-        // If all words are guessed, return the same index (shouldn't happen in normal flow)
-        return startingIndex
+        // If only one word available, return its index
+        if (availableIndices.size == 1) {
+            return availableIndices[0]
+        }
+        
+        // Find indices after the starting position
+        val afterStarting = availableIndices.filter { it > startingIndex }
+        if (afterStarting.isNotEmpty()) {
+            // Return the next available word after starting position
+            return afterStarting.minOrNull() ?: startingIndex
+        } else {
+            // Wrap around to beginning and find first available
+            return availableIndices.minOrNull() ?: startingIndex
+        }
     }
     
     /**
