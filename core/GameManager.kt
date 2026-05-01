@@ -144,6 +144,23 @@ class GameManager {
     }
     
     /**
+     * Sets a word to IN_TURN state (when a turn starts)
+     */
+    fun startTurn(): GameState {
+        validateGameState()
+        
+        val currentState = gameState!!
+        val currentWordIndex = currentState.current.wordIndex
+        
+        val updatedWords = currentState.wordBulk.toMutableList().apply {
+            this[currentWordIndex] = this[currentWordIndex].copy(state = WordState.IN_TURN)
+        }
+        
+        gameState = currentState.copy(wordBulk = updatedWords)
+        return gameState!!
+    }
+    
+    /**
      * Finds the next available word that hasn't been guessed yet
      */
     private fun findNextAvailableWordIndex(startingIndex: Int, words: List<Word>): Int {
