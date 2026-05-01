@@ -5,6 +5,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -67,7 +68,8 @@ fun GameScreen(
                 text = formatTime(timeLeft),
                 style = MaterialTheme.typography.h4,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(vertical = 16.dp)
+                modifier = Modifier.padding(vertical = 16.dp),
+                color = if (timeLeft <= 10) Color.Red else Color.Unspecified
             )
         }
         
@@ -84,7 +86,8 @@ fun GameScreen(
                         text = currentWord.text,
                         style = MaterialTheme.typography.h3,
                         fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colors.primary
                     )
                 }
                 WordState.GUESSED -> {
@@ -93,7 +96,7 @@ fun GameScreen(
                         style = MaterialTheme.typography.h3,
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colors.primary
+                        color = MaterialTheme.colors.secondary
                     )
                 }
                 WordState.AVAILABLE -> {
@@ -160,6 +163,14 @@ fun GameScreen(
                 }
             }
         }
+        
+        // Show word state for debugging purposes
+        Text(
+            text = "Word State: ${currentWord.state}",
+            style = MaterialTheme.typography.caption,
+            modifier = Modifier.padding(top = 8.dp),
+            color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
+        )
     }
 }
 
