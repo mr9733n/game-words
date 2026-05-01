@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.0] - 2023-06-15
+## [1.0.0] - 2026-05-01
 
 ### Added
 - Core game data models (Word, Team, GameSettings, GameState)
