@@ -19,7 +19,11 @@ fun SettingsScreen(
     onResetStateClicked: () -> Unit,
     onClearActiveWordsClicked: () -> Unit,
     onTestModeClicked: () -> Unit,
-    onGameModeClicked: () -> Unit
+    onGameModeClicked: () -> Unit,
+    onImportDictionaryClicked: () -> Unit,
+    onDictionaryStatsClicked: () -> Unit,
+    onWordManagementClicked: () -> Unit,
+    onClearDictionaryClicked: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -32,8 +36,8 @@ fun SettingsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
             Button(
@@ -50,7 +54,7 @@ fun SettingsScreen(
                 Text("Clear Active Words")
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = "Mode",
@@ -83,7 +87,42 @@ fun SettingsScreen(
                 Text("Game Mode")
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Words Dictionary",
+                style = MaterialTheme.typography.h6
+            )
+
+            Button(
+                onClick = onImportDictionaryClicked,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Import Dictionary")
+            }
+
+            Button(
+                onClick = onDictionaryStatsClicked,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Dictionary Stats")
+            }
+
+            Button(
+                onClick = onClearDictionaryClicked,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Clear Dictionary")
+            }
+
+            Button(
+                onClick = onWordManagementClicked,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Word Management")
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             Button(
                 onClick = onBackClicked,

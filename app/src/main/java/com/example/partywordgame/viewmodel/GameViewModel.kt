@@ -8,12 +8,14 @@ import com.example.partywordgame.models.GameMode
 import com.example.partywordgame.models.GameSettings
 import com.example.partywordgame.models.GameState
 import com.example.partywordgame.models.WordState
+import com.example.partywordgame.data.local.WordEntity
 import com.example.partywordgame.data.WordRepository
 import com.example.partywordgame.persistence.GamePersistence
 import com.example.partywordgame.persistence.GamePersistenceImpl
 import com.example.partywordgame.models.GameRecord
 import com.example.partywordgame.models.GameStatus
 import com.example.partywordgame.models.TeamScore
+import com.example.partywordgame.models.UsedWordRecord
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -47,6 +49,23 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     val records: StateFlow<List<GameRecord>> = _records
 
     private val wordRepository = WordRepository(application.applicationContext)
+
+    private val _wordSearchQuery = MutableStateFlow("")
+    val wordSearchQuery: StateFlow<String> = _wordSearchQuery
+
+    private val _wordDifficultyFilter = MutableStateFlow(setOf("easy", "medium", "hard"))
+    val wordDifficultyFilter: StateFlow<Set<String>> = _wordDifficultyFilter
+
+    private val _wordList = MutableStateFlow<List<WordEntity>>(emptyList())
+    val wordList: StateFlow<List<WordEntity>> = _wordList
+
+    private val _showDisabledWords = MutableStateFlow(false)
+    val showDisabledWords: StateFlow<Boolean> = _showDisabledWords
+
+    fun toggleShowDisabledWords() {
+        _showDisabledWords.value = !_showDisabledWords.value
+        searchWords()
+    }
 
     init {
         viewModelScope.launch {
@@ -521,6 +540,12 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                     teamName = it.name,
                     score = it.score
                 )
+            },
+            usedWords = finalState.wordBulk.map {
+                UsedWordRecord(
+                    id = it.id,
+                    text = it.text
+                )
             }
         )
 
@@ -573,6 +598,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             }
 
             _records.value = persistence.getGameRecords()
+            wordRepository.importDictionaryIfNeeded()
 
         } catch (e: Exception) {
             // Handle error
@@ -581,5 +607,126 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     fun clearError() {
         _errorMessage.value = null
+    }
+
+    fun importDictionary() {
+        viewModelScope.launch {
+            try {
+                val count = wordRepository.importDefaultDictionaryFromAssets()
+                _errorMessage.value = "Dictionary imported: $count words"
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.value = "Failed to import dictionary: ${e.message ?: "unknown error"}"
+            }
+        }
+    }
+
+    fun clearDictionary() {
+        viewModelScope.launch {
+            try {
+                wordRepository.clearDictionary()
+                _errorMessage.value = "Dictionary cleared"
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.value = "Failed to clear dictionary: ${e.message ?: "unknown error"}"
+            }
+        }
+    }
+
+    fun showDictionaryStats() {
+        viewModelScope.launch {
+            try {
+                val total = wordRepository.countAllWords()
+                val enabled = wordRepository.countEnabledWords()
+                val meta = wordRepository.getLastDictionaryMeta()
+
+                _errorMessage.value = buildString {
+                    append("Dictionary: $enabled enabled / $total total")
+
+                    meta?.let {
+                        append("\nSource: ${it.source}")
+                        append("\nLicense: ${it.license}")
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.value = "Failed to load dictionary stats: ${e.message ?: "unknown error"}"
+            }
+        }
+    }
+
+    fun showWordManagementScreen() {
+        _screenState.value = ScreenState.WORD_MANAGEMENT
+        searchWords("")
+    }
+
+    fun searchWords(query: String = _wordSearchQuery.value) {
+        _wordSearchQuery.value = query
+
+        viewModelScope.launch {
+            try {
+                _wordList.value = wordRepository.searchWords(
+                    query = query,
+                    difficulties = _wordDifficultyFilter.value.toList(),
+                    showDisabled = _showDisabledWords.value
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.value = "Failed to search words: ${e.message ?: "unknown error"}"
+            }
+        }
+    }
+
+    fun toggleWordDifficultyFilter(difficulty: String) {
+        val current = _wordDifficultyFilter.value
+
+        if (difficulty in current && current.size == 1) {
+            return
+        }
+
+        _wordDifficultyFilter.value =
+            if (difficulty in current) current - difficulty else current + difficulty
+
+        searchWords()
+    }
+
+    fun setWordEnabled(wordId: String, enabled: Boolean) {
+        viewModelScope.launch {
+            try {
+                wordRepository.setWordEnabled(wordId, enabled)
+                searchWords(_wordSearchQuery.value)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.value = "Failed to update word: ${e.message ?: "unknown error"}"
+            }
+        }
+    }
+
+    fun enableAllWords() {
+        viewModelScope.launch {
+            try {
+                val difficulties = _wordDifficultyFilter.value.toList()
+                wordRepository.enableWordsByDifficulty(difficulties)
+                searchWords(_wordSearchQuery.value)
+                _errorMessage.value = "Enabled words for: ${difficulties.joinToString()}"
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.value = "Failed to enable words: ${e.message ?: "unknown error"}"
+            }
+        }
+    }
+
+    fun disableAllWords() {
+        viewModelScope.launch {
+            try {
+                val difficulties = _wordDifficultyFilter.value.toList()
+                wordRepository.disableWordsByDifficulty(difficulties)
+                searchWords(_wordSearchQuery.value)
+                _errorMessage.value = "Disabled words for: ${difficulties.joinToString()}. Press Enable All to restore."
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.value = "Failed to disable words: ${e.message ?: "unknown error"}"
+            }
+        }
     }
 }

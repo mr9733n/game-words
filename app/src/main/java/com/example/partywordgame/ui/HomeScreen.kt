@@ -2,6 +2,7 @@ package com.example.partywordgame.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -62,5 +63,11 @@ fun HomeScreen(
         ) {
             Text("Settings")
         }
+
+        Text(
+            text = "v1.0.3 (c)2026 Полуночный игрун",
+            style = MaterialTheme.typography.subtitle2,
+            modifier = Modifier.padding(top = 50.dp)
+        )
     }
 }

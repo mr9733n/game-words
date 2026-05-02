@@ -1,15 +1,23 @@
 package com.example.partywordgame.data
 
 import android.content.Context
+import com.example.partywordgame.data.local.AppDatabase
+import com.example.partywordgame.data.local.DictionaryMetaEntity
+import com.example.partywordgame.data.local.WordEntity
 import com.example.partywordgame.models.DictionaryFile
 import com.example.partywordgame.models.GameMode
 import com.example.partywordgame.models.GameSettings
+import com.example.partywordgame.models.InsufficientWordsException
 import com.example.partywordgame.models.Word
 import kotlinx.serialization.json.Json
 
 class WordRepository(
     private val context: Context
 ) {
+    private val wordDao = AppDatabase.getInstance(context).wordDao()
+
+    private var lastDictionaryMeta: DictionaryFile? = null
+
     private val json = Json {
         ignoreUnknownKeys = true
     }
@@ -25,53 +33,173 @@ class WordRepository(
         "часы", "телефон", "компьютер", "телевизор", "радио"
     )
 
-    private val assetWords by lazy {
+    suspend fun getWordBulk(
+        settings: GameSettings,
+        activeWords: Set<String>,
+        mode: GameMode
+    ): List<Word> {
+        return when (mode) {
+            GameMode.TEST -> getTestWordBulk(settings, activeWords)
+            GameMode.NORMAL -> getDatabaseWordBulk(settings, activeWords)
+        }
+    }
+
+    private fun getTestWordBulk(
+        settings: GameSettings,
+        activeWords: Set<String>
+    ): List<Word> {
+        val availableWords = testWords
+            .filter { it !in activeWords }
+            .shuffled()
+            .take(settings.bulkSize)
+
+        if (availableWords.size < settings.bulkSize) {
+            throw InsufficientWordsException(
+                "Not enough words available. Requested: ${settings.bulkSize}, Available: ${availableWords.size}"
+            )
+        }
+
+        return availableWords.mapIndexed { index, text ->
+            Word(
+                id = "test_word_$index",
+                text = text
+            )
+        }
+    }
+
+    private suspend fun getDatabaseWordBulk(
+        settings: GameSettings,
+        activeWords: Set<String>
+    ): List<Word> {
+        val entities = wordDao.getRandomWords(
+            limit = settings.bulkSize,
+            difficulties = settings.difficulties,
+            excludedWords = activeWords.toList()
+        )
+
+        if (entities.size < settings.bulkSize) {
+            throw InsufficientWordsException(
+                "Not enough words available. Requested: ${settings.bulkSize}, Available: ${entities.size}"
+            )
+        }
+
+        return entities.map {
+            Word(
+                id = it.id,
+                text = it.text
+            )
+        }
+    }
+
+    suspend fun importDefaultDictionaryFromAssets(): Int {
         val rawJson = context.assets
             .open("dictionaries/ru_default_words.json")
             .bufferedReader()
             .use { it.readText() }
 
-        json.decodeFromString<DictionaryFile>(rawJson)
-            .words
-            .filter { it.enabled }
-    }
+        val dictionary = json.decodeFromString<DictionaryFile>(rawJson)
 
-    fun getWordBulk(
-        settings: GameSettings,
-        activeWords: Set<String>,
-        mode: GameMode = GameMode.TEST
-    ): List<Word> {
-        val sourceWords: List<Pair<String, String>> = when (mode) {
-            GameMode.TEST -> testWords.mapIndexed { index, text ->
-                "test_word_$index" to text
+        lastDictionaryMeta = dictionary
+
+        val entities = dictionary.words
+            .filter { it.enabled }
+            .map {
+                WordEntity(
+                    id = it.id,
+                    text = it.text,
+                    language = dictionary.language,
+                    difficulty = it.difficulty,
+                    category = it.category,
+                    enabled = it.enabled,
+                    source = dictionary.dictionaryId
+                )
             }
 
-            GameMode.NORMAL -> assetWords
-                .filter { word ->
-                    word.difficulty in settings.difficulties &&
-                            (settings.categories.isEmpty() || word.category in settings.categories)
-                }
-                .map { word ->
-                    word.id to word.text
-                }
+        val existingIds = wordDao.getAllWordIds().toSet()
+
+        val newWords = entities.filter { it.id !in existingIds }
+        val existingWords = entities.filter { it.id in existingIds }
+
+        if (newWords.isNotEmpty()) {
+            wordDao.insertWords(newWords)
         }
 
-        val availableWords = sourceWords
-            .filter { (_, text) -> text !in activeWords }
-            .shuffled()
-            .take(settings.bulkSize)
-
-        if (availableWords.size < settings.bulkSize) {
-            throw IllegalStateException(
-                "Not enough words available. Requested: ${settings.bulkSize}, Available: ${availableWords.size}"
+        existingWords.forEach { word ->
+            wordDao.updateWordKeepEnabled(
+                id = word.id,
+                text = word.text,
+                language = word.language,
+                difficulty = word.difficulty,
+                category = word.category,
+                source = word.source
             )
         }
 
-        return availableWords.map { (id, text) ->
-            Word(
-                id = id,
-                text = text
-            )
+        return entities.size
+    }
+
+    suspend fun clearDictionary() {
+        wordDao.clearWords()
+    }
+
+    suspend fun countAllWords(): Int {
+        return wordDao.countAllWords()
+    }
+
+    suspend fun countEnabledWords(): Int {
+        return wordDao.countEnabledWords()
+    }
+
+    suspend fun searchWords(
+        query: String,
+        difficulties: List<String>,
+        showDisabled: Boolean
+    ): List<WordEntity> {
+        return wordDao.searchWordsByDifficulty(query, difficulties, showDisabled)
+    }
+
+    suspend fun setWordEnabled(wordId: String, enabled: Boolean) {
+        wordDao.setWordEnabled(wordId, enabled)
+    }
+
+    suspend fun enableWordsByDifficulty(difficulties: List<String>) {
+        wordDao.enableWordsByDifficulty(difficulties)
+    }
+
+    suspend fun disableWordsByDifficulty(difficulties: List<String>) {
+        wordDao.disableWordsByDifficulty(difficulties)
+    }
+
+    fun getLastDictionaryMeta(): DictionaryFile? {
+        return lastDictionaryMeta
+    }
+
+    suspend fun importDictionaryIfNeeded(): String {
+        val rawJson = context.assets
+            .open("dictionaries/ru_default_words.json")
+            .bufferedReader()
+            .use { it.readText() }
+
+        val dictionary = json.decodeFromString<DictionaryFile>(rawJson)
+
+        val metaDao = AppDatabase.getInstance(context).dictionaryMetaDao()
+        val existing = metaDao.getMeta(dictionary.dictionaryId)
+
+        if (existing != null && existing.version >= dictionary.version) {
+            return "Dictionary is up to date (v${existing.version})"
         }
+
+        val count = importDefaultDictionaryFromAssets()
+
+        metaDao.upsert(
+            DictionaryMetaEntity(
+                id = dictionary.dictionaryId,
+                version = dictionary.version,
+                source = dictionary.source,
+                license = dictionary.license
+            )
+        )
+
+        return "Dictionary updated to v${dictionary.version}. Imported: $count words"
     }
 }

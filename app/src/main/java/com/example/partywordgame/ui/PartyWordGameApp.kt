@@ -20,6 +20,10 @@ fun PartyWordGameApp(
     val isTimerRunning = viewModel.isTimerRunning.collectAsState().value
     val currentMode = viewModel.currentMode.collectAsState().value
     val records = viewModel.records.collectAsState().value
+    val wordSearchQuery = viewModel.wordSearchQuery.collectAsState().value
+    val wordList = viewModel.wordList.collectAsState().value
+    val wordDifficultyFilter = viewModel.wordDifficultyFilter.collectAsState().value
+    val showDisabledWords = viewModel.showDisabledWords.collectAsState().value
 
     when (screenState) {
         ScreenState.HOME -> HomeScreen(
@@ -41,7 +45,27 @@ fun PartyWordGameApp(
             onResetStateClicked = { viewModel.resetSavedState() },
             onClearActiveWordsClicked = { viewModel.clearActiveWords() },
             onTestModeClicked = { viewModel.setTestMode() },
-            onGameModeClicked = { viewModel.setGameMode() }
+            onGameModeClicked = { viewModel.setGameMode() },
+            onImportDictionaryClicked = { viewModel.importDictionary() },
+            onDictionaryStatsClicked = { viewModel.showDictionaryStats() },
+            onClearDictionaryClicked = { viewModel.clearDictionary() },
+            onWordManagementClicked = { viewModel.showWordManagementScreen() },
+        )
+
+        ScreenState.WORD_MANAGEMENT -> WordManagementScreen(
+            query = wordSearchQuery,
+            words = wordList,
+            selectedDifficulties = wordDifficultyFilter,
+            onQueryChanged = { viewModel.searchWords(it) },
+            onDifficultyClicked = { viewModel.toggleWordDifficultyFilter(it) },
+            onWordEnabledChanged = { wordId, enabled ->
+                viewModel.setWordEnabled(wordId, enabled)
+            },
+            onEnableAllClicked = { viewModel.enableAllWords() },
+            onDisableAllClicked = { viewModel.disableAllWords() },
+            onBackClicked = { viewModel.showSettingsScreen() },
+            showDisabledWords = showDisabledWords,
+            onToggleShowDisabledWords = { viewModel.toggleShowDisabledWords() },
         )
 
         ScreenState.SETUP -> SetupScreen(
@@ -91,7 +115,7 @@ fun PartyWordGameApp(
     if (errorMessage != null) {
         AlertDialog(
             onDismissRequest = { viewModel.clearError() },
-            title = { Text("Cannot start game") },
+            title = { Text("Warning") },
             text = { Text(errorMessage) },
             confirmButton = {
                 Button(onClick = { viewModel.clearError() }) {

@@ -6,12 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [WordEntity::class],
-    version = 1,
+    entities = [WordEntity::class, DictionaryMetaEntity::class],
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun wordDao(): WordDao
+    abstract fun dictionaryMetaDao(): DictionaryMetaDao
 
     companion object {
         @Volatile
@@ -23,10 +24,14 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "party_word_game.db"
-                ).build().also {
-                    INSTANCE = it
-                }
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
+                    .also {
+                        INSTANCE = it
+                    }
             }
         }
     }
 }
+

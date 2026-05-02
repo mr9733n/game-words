@@ -1,6 +1,10 @@
 package com.example.partywordgame.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -19,35 +23,38 @@ fun RecordsScreen(
     records: List<GameRecord>,
     onBackClicked: () -> Unit
 ) {
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(
-            text = "Records",
-            style = MaterialTheme.typography.h4,
-            fontWeight = FontWeight.Bold
-        )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        item {
+            Text(
+                text = "Records",
+                style = MaterialTheme.typography.h4,
+                fontWeight = FontWeight.Bold
+            )
+        }
 
-        if (records.isEmpty()) {
-            Text("No finished games yet.")
-        } else {
-            records.forEach { record ->
-                RecordCard(record)
-                Spacer(modifier = Modifier.height(12.dp))
+        item {
+            Button(
+                onClick = onBackClicked,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Back")
             }
         }
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        Button(
-            onClick = onBackClicked,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Back")
+        if (records.isEmpty()) {
+            item {
+                Text("No finished games yet.")
+            }
+        } else {
+            items(records, key = { it.id }) { record ->
+                RecordCard(record)
+            }
         }
     }
 }
@@ -58,9 +65,12 @@ private fun RecordCard(record: GameRecord) {
         "dd.MM.yyyy HH:mm",
         Locale.getDefault()
     ).format(Date(record.finishedAt))
+    var expanded by remember { mutableStateOf(false) }
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { expanded = !expanded },
         elevation = 4.dp
     ) {
         Column(
@@ -86,6 +96,19 @@ private fun RecordCard(record: GameRecord) {
 
             record.scores.forEach { score ->
                 Text("${score.teamName}: ${score.score}")
+            }
+
+            if (expanded) {
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "Words:",
+                    fontWeight = FontWeight.Bold
+                )
+
+                record.usedWords.forEach { word ->
+                    Text("• ${word.text}")
+                }
             }
         }
     }

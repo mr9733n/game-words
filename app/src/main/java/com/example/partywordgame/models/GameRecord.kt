@@ -8,11 +8,18 @@ data class GameRecord(
     val finishedAt: Long,
     val winnerName: String?,
     val isTie: Boolean,
-    val scores: List<TeamScore>
+    val scores: List<TeamScore>,
+    val usedWords: List<UsedWordRecord> = emptyList()
 )
 
 @Serializable
 data class TeamScore(
     val teamName: String,
     val score: Int
+)
+
+@Serializable
+data class UsedWordRecord(
+    val id: String,
+    val text: String
 )

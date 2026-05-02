@@ -7,6 +7,7 @@ enum class ScreenState {
     SUMMARY,
     FINAL,
     SETTINGS,
-    RECORDS
+    RECORDS,
+    WORD_MANAGEMENT
 }
 

@@ -5,6 +5,17 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
+
+@Dao
+interface DictionaryMetaDao {
+
+    @Query("SELECT * FROM dictionary_meta WHERE id = :id LIMIT 1")
+    suspend fun getMeta(id: String): DictionaryMetaEntity?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsert(meta: DictionaryMetaEntity)
+}
+
 @Dao
 interface WordDao {
     @Query("""
@@ -22,12 +33,18 @@ interface WordDao {
     ): List<WordEntity>
 
     @Query("""
-        SELECT * FROM words
-        WHERE text LIKE '%' || :query || '%'
-        ORDER BY text ASC
-        LIMIT 200
-    """)
-    suspend fun searchWords(query: String): List<WordEntity>
+    SELECT * FROM words
+    WHERE text LIKE '%' || :query || '%'
+    AND difficulty IN (:difficulties)
+    AND (:showDisabled = 1 OR enabled = 1)
+    ORDER BY text ASC
+    LIMIT 1500
+""")
+    suspend fun searchWordsByDifficulty(
+        query: String,
+        difficulties: List<String>,
+        showDisabled: Boolean
+    ): List<WordEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWords(words: List<WordEntity>)
@@ -38,6 +55,15 @@ interface WordDao {
     @Query("UPDATE words SET enabled = 1")
     suspend fun enableAllWords()
 
+    @Query("UPDATE words SET enabled = 0")
+    suspend fun disableAllWords()
+
+    @Query("UPDATE words SET enabled = 1 WHERE difficulty IN (:difficulties)")
+    suspend fun enableWordsByDifficulty(difficulties: List<String>)
+
+    @Query("UPDATE words SET enabled = 0 WHERE difficulty IN (:difficulties)")
+    suspend fun disableWordsByDifficulty(difficulties: List<String>)
+
     @Query("DELETE FROM words")
     suspend fun clearWords()
 
@@ -46,4 +72,25 @@ interface WordDao {
 
     @Query("SELECT COUNT(*) FROM words WHERE enabled = 1")
     suspend fun countEnabledWords(): Int
+
+    @Query("SELECT id FROM words")
+    suspend fun getAllWordIds(): List<String>
+
+    @Query("""
+    UPDATE words
+    SET text = :text,
+        language = :language,
+        difficulty = :difficulty,
+        category = :category,
+        source = :source
+    WHERE id = :id
+""")
+    suspend fun updateWordKeepEnabled(
+        id: String,
+        text: String,
+        language: String,
+        difficulty: String,
+        category: String,
+        source: String
+    )
 }
