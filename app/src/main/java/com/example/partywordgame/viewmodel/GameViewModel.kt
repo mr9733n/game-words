@@ -8,11 +8,13 @@ import com.example.partywordgame.models.GameMode
 import com.example.partywordgame.models.GameSettings
 import com.example.partywordgame.models.GameState
 import com.example.partywordgame.models.WordState
+import com.example.partywordgame.data.WordRepository
 import com.example.partywordgame.persistence.GamePersistence
 import com.example.partywordgame.persistence.GamePersistenceImpl
 import com.example.partywordgame.models.GameRecord
 import com.example.partywordgame.models.GameStatus
 import com.example.partywordgame.models.TeamScore
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -21,7 +23,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
 
-    private val gameManager = GameManager()
+    private val gameManager = GameManager(getApplication())
     private val persistence: GamePersistence = GamePersistenceImpl(application)
     
     private val _gameState = MutableStateFlow<GameState?>(null)
@@ -43,6 +45,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _records = MutableStateFlow<List<GameRecord>>(emptyList())
     val records: StateFlow<List<GameRecord>> = _records
+
+    private val wordRepository = WordRepository(application.applicationContext)
 
     init {
         viewModelScope.launch {
@@ -106,7 +110,16 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                     GameMode.NORMAL -> persistence.getActiveWords()
                 }
 
-                val gameState = gameManager.startNewGame(effectiveSettings, activeWords)
+                val wordBulk = wordRepository.getWordBulk(
+                    settings = effectiveSettings,
+                    activeWords = activeWords,
+                    mode = mode
+                )
+
+                val gameState = gameManager.startNewGame(
+                    settings = effectiveSettings,
+                    wordBulk = wordBulk
+                )
 
                 _gameState.value = gameState
 
@@ -123,10 +136,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                 e.printStackTrace()
 
                 _errorMessage.value = when {
-                    e.message?.contains("Insufficient", ignoreCase = true) == true ->
-                        "Not enough available words. Clear active words in Settings or reduce bulk size.\n" +
-                                "Go to Settings: -> Clear Active Words"
-
+                    e.message?.contains("Not enough words available.", ignoreCase = true) == true ->
+                        "${e.message}. \nClear active words in Settings or reduce bulk size. \nGo to Settings -> Clear Active Words."
                     else ->
                         "Failed to start game: ${e.message ?: "unknown error"}"
                 }
@@ -142,7 +153,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     }
     
     fun canResumeGame(): Boolean {
-        return _gameState.value != null && _gameState.value?.status != com.example.partywordgame.models.GameStatus.FINISHED
+        return _gameState.value != null && _gameState.value?.status != GameStatus.FINISHED
     }
 
     fun startTurn() {
@@ -175,7 +186,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             wordBulk = updatedWords,
             current = currentState.current.copy(
                 wordIndex = wordIndex,
-                skippedWordIdsInTurn = emptySet()
+                skippedWordIdsInTurn = emptyList()
             )
         )
 
@@ -217,7 +228,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                 teams = updatedTeams,
                 wordBulk = updatedWords,
                 current = currentState.current.copy(
-                    skippedWordIdsInTurn = emptySet()
+                    skippedWordIdsInTurn = emptyList()
                 )
             )
 
@@ -278,7 +289,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun pauseGame() {
-        stopTimer()
+        timerJob?.cancel()
+        timerJob = null
+        _isTimerRunning.value = false
     }
 
     fun restartRound() {
@@ -311,10 +324,6 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         _screenState.value = ScreenState.SETUP
     }
 
-    fun moveToNextTurn() {
-        finishCurrentTurn()
-    }
-
     private fun finishCurrentTurn() {
         val currentState = _gameState.value ?: return
 
@@ -334,7 +343,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             val roundFinishedState = currentState.copy(
                 wordBulk = cleanedWords,
                 current = currentState.current.copy(
-                    skippedWordIdsInTurn = emptySet()
+                    skippedWordIdsInTurn = emptyList()
                 )
             )
 
@@ -358,7 +367,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             current = currentState.current.copy(
                 teamIndex = nextTeamIndex,
                 wordIndex = nextWordIndex,
-                skippedWordIdsInTurn = emptySet()
+                skippedWordIdsInTurn = emptyList()
             )
         )
 
@@ -429,7 +438,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         val currentWordIndex = currentState.current.wordIndex
         val currentWord = currentState.wordBulk[currentWordIndex]
 
-        val skippedIds = currentState.current.skippedWordIdsInTurn + currentWord.id
+        val skippedIds = (
+                currentState.current.skippedWordIdsInTurn + currentWord.id
+                ).distinct()
 
         val updatedWords = currentState.wordBulk.toMutableList().apply {
             this[currentWordIndex] = this[currentWordIndex].copy(
@@ -494,7 +505,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         val currentState = _gameState.value ?: return
 
         val finalState = currentState.copy(
-            status = com.example.partywordgame.models.GameStatus.FINISHED
+            status = GameStatus.FINISHED
         )
 
         val maxScore = finalState.teams.maxOfOrNull { it.score } ?: 0
@@ -528,25 +539,18 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         }
         _screenState.value = ScreenState.FINAL
     }
-    
+
     private fun startTimer() {
-        stopTimer() // Make sure any existing timer is stopped
-        
-        _gameState.value?.let { gameState ->
-            _timeLeft.value = gameState.settings.turnDurationSeconds
-            _isTimerRunning.value = true
-            
-            timerJob = viewModelScope.launch {
-                while (_timeLeft.value > 0 && _isTimerRunning.value) {
-                    kotlinx.coroutines.delay(1000)
-                    _timeLeft.value--
-                }
-                
-                if (_timeLeft.value == 0) {
-                    // Time's up, move to next turn
-                    moveToNextTurn()
-                }
+        timerJob?.cancel()
+        _isTimerRunning.value = true
+
+        timerJob = viewModelScope.launch {
+            while (_timeLeft.value > 0) {
+                delay(1000)
+                _timeLeft.value -= 1
             }
+
+            finishCurrentTurn()
         }
     }
     

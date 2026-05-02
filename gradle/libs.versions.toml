@@ -12,6 +12,7 @@ activity-compose = "1.9.2"
 androidx-tv = "1.0.0"
 junit = "4.13.2"
 coil3 = "3.1.0"
+room-common-jvm = "2.8.4"
 
 [libraries]
 # Kotlin
@@ -47,6 +48,7 @@ coil3-network-ktor            = { module = "io.coil-kt.coil3:coil-network-ktor3"
 
 # Test
 junit                         = { module = "junit:junit",                            version.ref = "junit" }
+androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "room-common-jvm" }
 
 [plugins]
 androidApplication    = { id = "com.android.application",                     version.ref = "agp" }

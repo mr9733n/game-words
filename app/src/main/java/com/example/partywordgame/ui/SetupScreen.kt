@@ -1,11 +1,16 @@
 package com.example.partywordgame.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import com.example.partywordgame.R
 import com.example.partywordgame.models.GameSettings
 import com.example.partywordgame.models.GameMode
 
@@ -24,13 +29,23 @@ fun SetupScreen(
     var turnDuration by remember { mutableStateOf(60) }
     
     val bulkSizeOptions = listOf(40, 60, 80, 100)
-    // val bulkSizeOptions = listOf(10, 20, 30, 40) // Test
+    var selectedDifficulties by remember {
+        mutableStateOf(setOf("easy", "medium", "hard"))
+    }
     val isTestMode = currentMode == GameMode.TEST
-    
+
+    val screenHeight = LocalConfiguration.current.screenHeightDp
+
+    val scale = when {
+        screenHeight < 600 -> 0.75f
+        screenHeight < 700 -> 0.85f
+        else -> 1f
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding((16 * scale).dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
@@ -38,22 +53,70 @@ fun SetupScreen(
         Text(
             text = if (isTestMode) "Testing Mode" else "Game Setup",
             style = MaterialTheme.typography.h5,
-            modifier = Modifier.padding(bottom = 32.dp)
+            modifier = Modifier.padding(bottom = (24 * scale).dp)
         )
 
         if (!isTestMode) {
             // Bulk Size Selector
             SettingRow(
                 label = "Word Bulk Size",
-                modifier = Modifier.padding(vertical = 8.dp)
+                Modifier.padding(vertical = (6 * scale).dp)
             ) {
-                Row {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy((8 * scale).dp)
+                ) {
                     bulkSizeOptions.forEach { size ->
-                        RadioButton(
-                            selected = bulkSize == size,
-                            onClick = { bulkSize = size }
-                        )
-                        Text(text = size.toString(), modifier = Modifier.padding(end = 16.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.clickable { bulkSize = size }
+                        ) {
+                            RadioButton(
+                                selected = bulkSize == size,
+                                onClick = null
+                            )
+                            Text(
+                                text = size.toString(),
+                                modifier = Modifier.padding(start = (4 * scale).dp)
+                            )
+                        }
+                    }
+                }
+            }
+
+            SettingRow(
+                label = "Word Difficulty",
+                modifier = Modifier.padding(vertical = (6 * scale).dp)
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy((8 * scale).dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    listOf("easy", "medium", "hard").forEach { difficulty ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.clickable {
+                                  if (difficulty in selectedDifficulties && selectedDifficulties.size == 1) {
+                                    return@clickable
+                                }
+
+                                selectedDifficulties =
+                                    if (difficulty in selectedDifficulties) {
+                                        selectedDifficulties - difficulty
+                                    } else {
+                                        selectedDifficulties + difficulty
+                                    }
+                            }
+                        ) {
+                            Checkbox(
+                                checked = difficulty in selectedDifficulties,
+                                onCheckedChange = null
+                            )
+
+                            Text(
+                                text = difficulty.replaceFirstChar { it.uppercase() },
+                                modifier = Modifier.padding(start = (4 * scale).dp)
+                            )
+                        }
                     }
                 }
             }
@@ -94,9 +157,10 @@ fun SetupScreen(
                                 }
                             },
                             label = { Text("Team ${index + 1} name") },
+                            singleLine = true,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 4.dp)
+                                .padding(vertical = (2 * scale).dp)
                         )
                     }
                 }
@@ -155,20 +219,26 @@ fun SetupScreen(
         ) {
             Button(
                 onClick = onBackClicked,
-                modifier = Modifier.padding(end = 8.dp)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = (8 * scale).dp)
             ) {
-                Text("Back")
+                Text(stringResource(R.string.back))
             }
 
             Button(
                 onClick = {
+                    val safeDifficulties = selectedDifficulties.ifEmpty {
+                        setOf("easy", "medium", "hard")
+                    }
                     val settings = if (isTestMode) {
                         GameSettings(
-                            bulkSize = 5,
-                            teamCount = 2,
-                            roundCount = 2,
-                            turnDurationSeconds = 15,
-                            teamNames = listOf("Test Team 1", "Test Team 2")
+                            bulkSize = bulkSize,
+                            teamCount = teamCount,
+                            roundCount = roundCount,
+                            turnDurationSeconds = turnDuration,
+                            teamNames = teamNames.take(teamCount),
+                            difficulties = safeDifficulties.toList()
                         )
                     } else {
                         GameSettings(
@@ -176,15 +246,17 @@ fun SetupScreen(
                             teamCount = teamCount,
                             roundCount = roundCount,
                             turnDurationSeconds = turnDuration,
-                            teamNames = teamNames.take(teamCount)
+                            teamNames = teamNames.take(teamCount),
                         )
                     }
 
                     onSettingsConfirmed(settings)
                 },
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = (8 * scale).dp)
             ) {
-                Text("Start Game")
+                Text(stringResource(R.string.start_game))
             }
         }
     }
@@ -196,12 +268,23 @@ fun SettingRow(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(bottom = 4.dp)
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
         )
-        content()
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            content()
+        }
     }
 }

@@ -1,17 +1,27 @@
 package com.example.partywordgame.core
 
 import com.example.partywordgame.models.*
+import android.content.Context
+import java.util.UUID
 import kotlin.random.Random
 
-class GameManager {
+class GameManager(
+    private val context: Context? = null
+) {
     private var gameState: GameState? = null
     
     /**
      * Starts a new game with the provided settings
      */
-    fun startNewGame(settings: GameSettings, excludedWords: Set<String> = emptySet()): GameState {
-        val dictionary = WordDictionary()
-        val words = dictionary.selectWordBatch(settings.bulkSize, excludedWords)
+    fun startNewGame(
+        settings: GameSettings,
+        wordBulk: List<Word>
+    ): GameState {
+        if (wordBulk.size < settings.bulkSize) {
+            throw InsufficientWordsException(
+                "Not enough words available. Requested: ${settings.bulkSize}, Available: ${wordBulk.size}"
+            )
+        }
 
         val teams = (0 until settings.teamCount).map { index ->
             Team(
@@ -21,14 +31,18 @@ class GameManager {
                 colorIndex = index
             )
         }
-        
+
         gameState = GameState(
-            gameId = java.util.UUID.randomUUID().toString(),
+            gameId = UUID.randomUUID().toString(),
             status = GameStatus.ACTIVE,
             settings = settings,
             teams = teams,
-            wordBulk = words.map { it.copy(state = WordState.AVAILABLE) },
-            current = CurrentTurn(round = 1, teamIndex = 0, wordIndex = 0)
+            wordBulk = wordBulk,
+            current = CurrentTurn(
+                round = 1,
+                teamIndex = 0,
+                wordIndex = 0
+            )
         )
 
         return gameState!!

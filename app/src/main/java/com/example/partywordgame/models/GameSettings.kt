@@ -6,4 +6,6 @@ data class GameSettings(
     val roundCount: Int,
     val turnDurationSeconds: Int,
     val teamNames: List<String> = emptyList(),
+    val difficulties: List<String> = listOf("easy", "medium", "hard"),
+    val categories: List<String> = emptyList()
 )

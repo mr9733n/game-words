@@ -1,5 +1,6 @@
 package com.example.partywordgame.models
 
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
 data class GameState(
@@ -11,11 +12,12 @@ data class GameState(
     val current: CurrentTurn
 )
 
+@Serializable
 data class CurrentTurn(
     val round: Int,
     val teamIndex: Int,
     val wordIndex: Int,
-    val skippedWordIdsInTurn: Set<String> = emptySet()
+    val skippedWordIdsInTurn: List<String> = emptyList()
 )
 
 enum class GameStatus {

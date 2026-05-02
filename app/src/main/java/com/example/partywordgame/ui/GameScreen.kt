@@ -11,8 +11,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.foundation.background
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import com.example.partywordgame.models.teamColors
 import com.example.partywordgame.audio.SoundPlayer
 import com.example.partywordgame.models.GameState
@@ -34,11 +33,17 @@ fun GameScreen(
     val currentWord = gameState.wordBulk[gameState.current.wordIndex]
     val currentTeam = gameState.teams[gameState.current.teamIndex]
     val currentTeamColor = teamColors[currentTeam.colorIndex % teamColors.size]
+    val screenHeight = LocalConfiguration.current.screenHeightDp
+    val scale = when {
+        screenHeight < 600 -> 0.75f
+        screenHeight < 700 -> 0.85f
+        else -> 1f
+    }
     
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding((16 * scale).dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -49,22 +54,28 @@ fun GameScreen(
         ) {
             Text(
                 text = "Round ${gameState.current.round}",
-                style = MaterialTheme.typography.h3
+                style = MaterialTheme.typography.h3.copy(
+                    fontSize = MaterialTheme.typography.h3.fontSize * scale
+                )
             )
 
             Text(
                 text = currentTeam.name,
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.h4.copy(
+                    fontSize = MaterialTheme.typography.h4.fontSize * scale
+                ),
                 fontWeight = FontWeight.Bold,
                 color = currentTeamColor,
-                modifier = Modifier.padding(top = 4.dp)
+                modifier = Modifier.padding(top = (4 * scale).dp)
             )
             
             Text(
                 text = getRoundRule(gameState.current.round),
-                style = MaterialTheme.typography.h5,
-                fontSize = 22.sp,
-                modifier = Modifier.padding(top = 4.dp)
+                style = MaterialTheme.typography.h5.copy(
+                    fontSize = MaterialTheme.typography.h5.fontSize * scale
+                ),
+                fontSize = (16 * scale).sp,
+                modifier = Modifier.padding(top = (4 * scale).dp)
             )
 
             // Timer display
@@ -92,9 +103,11 @@ fun GameScreen(
             Text(
                 text = timerText,
                 color = timerColor,
-                style = MaterialTheme.typography.h1,
+                style = MaterialTheme.typography.h2.copy(
+                    fontSize = MaterialTheme.typography.h2.fontSize * scale
+                ),
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(vertical = 16.dp)
+                modifier = Modifier.padding(vertical = (16 * scale).dp)
             )
         }
         
@@ -107,88 +120,99 @@ fun GameScreen(
             if (!isTimerRunning) {
                 Button(
                     onClick = onStartTurn,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier.padding(bottom = (16 * scale).dp)
                 ) {
                     Text("Start Turn")
                 }
             } else {
                 Text(
                     text = currentWord.text,
-                    style = MaterialTheme.typography.h3,
-                    fontSize = 32.sp,
+                    style = MaterialTheme.typography.h4.copy(
+                        fontSize = MaterialTheme.typography.h4.fontSize * scale
+                    ),
                     fontWeight = FontWeight.Bold
                 )
             }
         }
-        
+
         // Action buttons
         if (isTimerRunning && currentWord.state == WordState.IN_TURN) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = (16 * scale).dp),
+                verticalArrangement = Arrangement.spacedBy((8 * scale).dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.spacedBy((8 * scale).dp)
                 ) {
                     Button(
                         onClick = onGuessed,
                         modifier = Modifier
                             .weight(1f)
-                            .padding(end = 8.dp),
+                            .height((48 * scale).dp),
                         colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
                     ) {
                         Text("Guessed", color = MaterialTheme.colors.onPrimary)
                     }
-                    
+
                     Button(
                         onClick = onNotGuessed,
                         modifier = Modifier
                             .weight(1f)
-                            .padding(horizontal = 4.dp),
+                            .height((48 * scale).dp),
                         colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)
                     ) {
-                        Text("Not Guessed", color = MaterialTheme.colors.onSecondary)
+                        Text("Missed", color = MaterialTheme.colors.onSecondary)
                     }
-                    
+
                     Button(
                         onClick = onNextWord,
                         modifier = Modifier
                             .weight(1f)
-                            .padding(start = 8.dp),
+                            .height((48 * scale).dp),
                         colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface)
                     ) {
                         Text("Skip", color = MaterialTheme.colors.onSurface)
                     }
                 }
-                
+
+                Spacer(modifier = Modifier.height((24 * scale).dp))
+
                 Button(
                     onClick = onPause,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 46.dp),
+                        .height((42 * scale).dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
                 ) {
                     Text("Pause", color = MaterialTheme.colors.onError)
                 }
 
-                OutlinedButton(
-                    onClick = onRestartRound,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp)
-                ) {
-                    Text("Restart Round")
-                }
+                Spacer(modifier = Modifier.height((8 * scale).dp))
 
-                OutlinedButton(
-                    onClick = onRestartGame,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy((8 * scale).dp)
                 ) {
-                    Text("Restart Game")
+                    OutlinedButton(
+                        onClick = onRestartRound,
+                        modifier = Modifier
+                            .weight(1f)
+                            .height((42 * scale).dp)
+                    ) {
+                        Text("Restart Round")
+                    }
+
+                    OutlinedButton(
+                        onClick = onRestartGame,
+                        modifier = Modifier
+                            .weight(1f)
+                            .height((42 * scale).dp)
+                    ) {
+                        Text("New Game")
+                    }
                 }
             }
         }
