@@ -1,7 +1,7 @@
 {
   "dictionaryId": "ru_default",
   "language": "ru",
-  "version": 2,
+  "version": 8,
   "source": "OpenRussian / Badestrand russian-dictionary",
   "license": "CC-BY-SA-4.0",
   "words": [
@@ -50,13 +50,6 @@
     {
       "id": "ru_noun_голова",
       "text": "голова",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_друг",
-      "text": "друг",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -190,13 +183,6 @@
     {
       "id": "ru_noun_ночь",
       "text": "ночь",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_женщина",
-      "text": "женщина",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -426,20 +412,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_власть",
-      "text": "власть",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_образ",
-      "text": "образ",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_письмо",
       "text": "письмо",
       "difficulty": "easy",
@@ -482,13 +454,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_ребята",
-      "text": "ребята",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_квартира",
       "text": "квартира",
       "difficulty": "medium",
@@ -510,13 +475,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_хозяин",
-      "text": "хозяин",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_внимание",
       "text": "внимание",
       "difficulty": "medium",
@@ -533,13 +491,6 @@
     {
       "id": "ru_noun_труд",
       "text": "труд",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_парень",
-      "text": "парень",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -594,13 +545,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_мужчина",
-      "text": "мужчина",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_момент",
       "text": "момент",
       "difficulty": "easy",
@@ -624,13 +568,6 @@
     {
       "id": "ru_noun_семья",
       "text": "семья",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_армия",
-      "text": "армия",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -839,22 +776,8 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_государство",
-      "text": "государство",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_глава",
       "text": "глава",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_край",
-      "text": "край",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -869,13 +792,6 @@
     {
       "id": "ru_noun_судьба",
       "text": "судьба",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_рота",
-      "text": "рота",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -930,23 +846,9 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_командир",
-      "text": "командир",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_боль",
       "text": "боль",
       "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_господин",
-      "text": "господин",
-      "difficulty": "medium",
       "category": "noun",
       "enabled": true
     },
@@ -1077,20 +979,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_рубль",
-      "text": "рубль",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_служба",
-      "text": "служба",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_процесс",
       "text": "процесс",
       "difficulty": "easy",
@@ -1182,13 +1070,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_кабинет",
-      "text": "кабинет",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_колено",
       "text": "колено",
       "difficulty": "easy",
@@ -1231,13 +1112,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_мужик",
-      "text": "мужик",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_интерес",
       "text": "интерес",
       "difficulty": "easy",
@@ -1269,13 +1143,6 @@
       "id": "ru_noun_качество",
       "text": "качество",
       "difficulty": "hard",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_член",
-      "text": "член",
-      "difficulty": "easy",
       "category": "noun",
       "enabled": true
     },
@@ -1318,13 +1185,6 @@
       "id": "ru_noun_институт",
       "text": "институт",
       "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_правительство",
-      "text": "правительство",
-      "difficulty": "hard",
       "category": "noun",
       "enabled": true
     },
@@ -1378,23 +1238,9 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_король",
-      "text": "король",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_половина",
       "text": "половина",
       "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_метр",
-      "text": "метр",
-      "difficulty": "easy",
       "category": "noun",
       "enabled": true
     },
@@ -1436,13 +1282,6 @@
     {
       "id": "ru_noun_род",
       "text": "род",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_офицер",
-      "text": "офицер",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -1721,13 +1560,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_революция",
-      "text": "революция",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_улыбка",
       "text": "улыбка",
       "difficulty": "easy",
@@ -1786,13 +1618,6 @@
     {
       "id": "ru_noun_болезнь",
       "text": "болезнь",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_сосед",
-      "text": "сосед",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -1931,13 +1756,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_гражданин",
-      "text": "гражданин",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_крыша",
       "text": "крыша",
       "difficulty": "easy",
@@ -1994,13 +1812,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_войско",
-      "text": "войско",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_удовольствие",
       "text": "удовольствие",
       "difficulty": "hard",
@@ -2025,20 +1836,6 @@
       "id": "ru_noun_лестница",
       "text": "лестница",
       "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_министр",
-      "text": "министр",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_фронт",
-      "text": "фронт",
-      "difficulty": "easy",
       "category": "noun",
       "enabled": true
     },
@@ -2092,30 +1889,9 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_километр",
-      "text": "километр",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_председатель",
       "text": "председатель",
       "difficulty": "hard",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_прочее",
-      "text": "прочее",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_доллар",
-      "text": "доллар",
-      "difficulty": "easy",
       "category": "noun",
       "enabled": true
     },
@@ -2421,13 +2197,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_штаб",
-      "text": "штаб",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_детство",
       "text": "детство",
       "difficulty": "easy",
@@ -2498,13 +2267,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_ссср",
-      "text": "ссср",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_волна",
       "text": "волна",
       "difficulty": "easy",
@@ -2515,13 +2277,6 @@
       "id": "ru_noun_глубина",
       "text": "глубина",
       "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_представитель",
-      "text": "представитель",
-      "difficulty": "hard",
       "category": "noun",
       "enabled": true
     },
@@ -2557,13 +2312,6 @@
       "id": "ru_noun_впечатление",
       "text": "впечатление",
       "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_отдел",
-      "text": "отдел",
-      "difficulty": "easy",
       "category": "noun",
       "enabled": true
     },
@@ -2606,13 +2354,6 @@
       "id": "ru_noun_знание",
       "text": "знание",
       "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_секретарь",
-      "text": "секретарь",
-      "difficulty": "medium",
       "category": "noun",
       "enabled": true
     },
@@ -2855,22 +2596,8 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_тётя",
-      "text": "тётя",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_мастер",
       "text": "мастер",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_отряд",
-      "text": "отряд",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -2879,13 +2606,6 @@
       "id": "ru_noun_старуха",
       "text": "старуха",
       "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_руководитель",
-      "text": "руководитель",
-      "difficulty": "hard",
       "category": "noun",
       "enabled": true
     },
@@ -3107,13 +2827,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_пуля",
-      "text": "пуля",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_сомнение",
       "text": "сомнение",
       "difficulty": "medium",
@@ -3324,13 +3037,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_охрана",
-      "text": "охрана",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_масло",
       "text": "масло",
       "difficulty": "easy",
@@ -3471,22 +3177,8 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_королева",
-      "text": "королева",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_вход",
       "text": "вход",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_церковь",
-      "text": "церковь",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -3681,13 +3373,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_приятель",
-      "text": "приятель",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_ручка",
       "text": "ручка",
       "difficulty": "easy",
@@ -3753,13 +3438,6 @@
     {
       "id": "ru_noun_удивление",
       "text": "удивление",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_следователь",
-      "text": "следователь",
       "difficulty": "medium",
       "category": "noun",
       "enabled": true
@@ -4052,13 +3730,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_хозяйка",
-      "text": "хозяйка",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_штаны",
       "text": "штаны",
       "difficulty": "easy",
@@ -4234,13 +3905,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_париж",
-      "text": "париж",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_записка",
       "text": "записка",
       "difficulty": "easy",
@@ -4278,13 +3942,6 @@
     {
       "id": "ru_noun_строй",
       "text": "строй",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_морда",
-      "text": "морда",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -4451,27 +4108,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_экономика",
-      "text": "экономика",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_песнь",
-      "text": "песнь",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_шинель",
-      "text": "шинель",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_лёд",
       "text": "лёд",
       "difficulty": "easy",
@@ -4523,13 +4159,6 @@
     {
       "id": "ru_noun_файл",
       "text": "файл",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_орудие",
-      "text": "орудие",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -4598,13 +4227,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_республика",
-      "text": "республика",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_пояс",
       "text": "пояс",
       "difficulty": "easy",
@@ -4614,13 +4236,6 @@
     {
       "id": "ru_noun_шёпот",
       "text": "шёпот",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_дивизия",
-      "text": "дивизия",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -4689,13 +4304,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_подруга",
-      "text": "подруга",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_изба",
       "text": "изба",
       "difficulty": "easy",
@@ -4713,13 +4321,6 @@
       "id": "ru_noun_пёс",
       "text": "пёс",
       "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_заместитель",
-      "text": "заместитель",
-      "difficulty": "medium",
       "category": "noun",
       "enabled": true
     },
@@ -4878,13 +4479,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_разведка",
-      "text": "разведка",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_справа",
       "text": "справа",
       "difficulty": "easy",
@@ -4923,13 +4517,6 @@
       "id": "ru_noun_печать",
       "text": "печать",
       "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_крестьянин",
-      "text": "крестьянин",
-      "difficulty": "medium",
       "category": "noun",
       "enabled": true
     },
@@ -4978,13 +4565,6 @@
     {
       "id": "ru_noun_топор",
       "text": "топор",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_убийца",
-      "text": "убийца",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -5055,13 +4635,6 @@
     {
       "id": "ru_noun_одеяло",
       "text": "одеяло",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_храм",
-      "text": "храм",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -5305,13 +4878,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_юноша",
-      "text": "юноша",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_доля",
       "text": "доля",
       "difficulty": "easy",
@@ -5398,13 +4964,6 @@
     {
       "id": "ru_noun_сфера",
       "text": "сфера",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_малыш",
-      "text": "малыш",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -5536,13 +5095,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_молодёжь",
-      "text": "молодёжь",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_радио",
       "text": "радио",
       "difficulty": "easy",
@@ -5608,13 +5160,6 @@
     {
       "id": "ru_noun_цепь",
       "text": "цепь",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_метода",
-      "text": "метода",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -5711,13 +5256,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_шеф",
-      "text": "шеф",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_вещество",
       "text": "вещество",
       "difficulty": "medium",
@@ -5802,13 +5340,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_эпоха",
-      "text": "эпоха",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_отдых",
       "text": "отдых",
       "difficulty": "easy",
@@ -5825,13 +5356,6 @@
     {
       "id": "ru_noun_шар",
       "text": "шар",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_звание",
-      "text": "звание",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -5900,13 +5424,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_чечня",
-      "text": "чечня",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_марка",
       "text": "марка",
       "difficulty": "easy",
@@ -5916,13 +5433,6 @@
     {
       "id": "ru_noun_разрешение",
       "text": "разрешение",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_император",
-      "text": "император",
       "difficulty": "medium",
       "category": "noun",
       "enabled": true
@@ -6110,13 +5620,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_костя",
-      "text": "костя",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_коньяк",
       "text": "коньяк",
       "difficulty": "easy",
@@ -6257,13 +5760,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_константин",
-      "text": "константин",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_мелочь",
       "text": "мелочь",
       "difficulty": "easy",
@@ -6280,13 +5776,6 @@
     {
       "id": "ru_noun_пушок",
       "text": "пушок",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_тётка",
-      "text": "тётка",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -6309,13 +5798,6 @@
       "id": "ru_noun_ружьё",
       "text": "ружьё",
       "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_кандидат",
-      "text": "кандидат",
-      "difficulty": "medium",
       "category": "noun",
       "enabled": true
     },
@@ -6453,13 +5935,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_сволочь",
-      "text": "сволочь",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_роза",
       "text": "роза",
       "difficulty": "easy",
@@ -6491,13 +5966,6 @@
       "id": "ru_noun_тяжесть",
       "text": "тяжесть",
       "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_частность",
-      "text": "частность",
-      "difficulty": "medium",
       "category": "noun",
       "enabled": true
     },
@@ -6656,13 +6124,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_санкт",
-      "text": "санкт",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_ковёр",
       "text": "ковёр",
       "difficulty": "easy",
@@ -6698,13 +6159,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_училище",
-      "text": "училище",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_рыцарь",
       "text": "рыцарь",
       "difficulty": "easy",
@@ -6733,13 +6187,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_государь",
-      "text": "государь",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_путешествие",
       "text": "путешествие",
       "difficulty": "medium",
@@ -6754,23 +6201,9 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_империя",
-      "text": "империя",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_давление",
       "text": "давление",
       "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_патрон",
-      "text": "патрон",
-      "difficulty": "easy",
       "category": "noun",
       "enabled": true
     },
@@ -6789,13 +6222,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_хрен",
-      "text": "хрен",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_применение",
       "text": "применение",
       "difficulty": "medium",
@@ -6805,13 +6231,6 @@
     {
       "id": "ru_noun_лекция",
       "text": "лекция",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_супруг",
-      "text": "супруг",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -6827,20 +6246,6 @@
       "id": "ru_noun_галстук",
       "text": "галстук",
       "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_док",
-      "text": "док",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_социализм",
-      "text": "социализм",
-      "difficulty": "medium",
       "category": "noun",
       "enabled": true
     },
@@ -6868,13 +6273,6 @@
     {
       "id": "ru_noun_мука",
       "text": "мука",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_штат",
-      "text": "штат",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -7076,13 +6474,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_москвич",
-      "text": "москвич",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_транспорт",
       "text": "транспорт",
       "difficulty": "medium",
@@ -7139,13 +6530,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_красавица",
-      "text": "красавица",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_крышка",
       "text": "крышка",
       "difficulty": "easy",
@@ -7162,13 +6546,6 @@
     {
       "id": "ru_noun_сарай",
       "text": "сарай",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_контора",
-      "text": "контора",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -7225,13 +6602,6 @@
     {
       "id": "ru_noun_спора",
       "text": "спора",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_корея",
-      "text": "корея",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -7314,13 +6684,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_прокурор",
-      "text": "прокурор",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_экипаж",
       "text": "экипаж",
       "difficulty": "easy",
@@ -7345,13 +6708,6 @@
       "id": "ru_noun_трус",
       "text": "трус",
       "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_иностранец",
-      "text": "иностранец",
-      "difficulty": "medium",
       "category": "noun",
       "enabled": true
     },
@@ -7482,22 +6838,8 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_рубаха",
-      "text": "рубаха",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_спирт",
       "text": "спирт",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_принц",
-      "text": "принц",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -7545,13 +6887,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_мистер",
-      "text": "мистер",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_происхождение",
       "text": "происхождение",
       "difficulty": "hard",
@@ -7569,20 +6904,6 @@
       "id": "ru_noun_проявление",
       "text": "проявление",
       "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_цивилизация",
-      "text": "цивилизация",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_окоп",
-      "text": "окоп",
-      "difficulty": "easy",
       "category": "noun",
       "enabled": true
     },
@@ -7608,13 +6929,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_коммунизм",
-      "text": "коммунизм",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_визит",
       "text": "визит",
       "difficulty": "easy",
@@ -7629,20 +6943,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_учреждение",
-      "text": "учреждение",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_нация",
-      "text": "нация",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_прибыль",
       "text": "прибыль",
       "difficulty": "easy",
@@ -7652,13 +6952,6 @@
     {
       "id": "ru_noun_атмосфера",
       "text": "атмосфера",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_величество",
-      "text": "величество",
       "difficulty": "medium",
       "category": "noun",
       "enabled": true
@@ -7727,20 +7020,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_повышение",
-      "text": "повышение",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_папироса",
-      "text": "папироса",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_тряпка",
       "text": "тряпка",
       "difficulty": "easy",
@@ -7790,20 +7069,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_комбат",
-      "text": "комбат",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_коллектив",
-      "text": "коллектив",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_чтение",
       "text": "чтение",
       "difficulty": "easy",
@@ -7832,13 +7097,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_подвиг",
-      "text": "подвиг",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_продукция",
       "text": "продукция",
       "difficulty": "medium",
@@ -7855,13 +7113,6 @@
     {
       "id": "ru_noun_кирпич",
       "text": "кирпич",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_копейка",
-      "text": "копейка",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -7884,20 +7135,6 @@
       "id": "ru_noun_установка",
       "text": "установка",
       "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_федерация",
-      "text": "федерация",
-      "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_слуга",
-      "text": "слуга",
-      "difficulty": "easy",
       "category": "noun",
       "enabled": true
     },
@@ -8049,23 +7286,9 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_флот",
-      "text": "флот",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_налог",
       "text": "налог",
       "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_демократия",
-      "text": "демократия",
-      "difficulty": "medium",
       "category": "noun",
       "enabled": true
     },
@@ -8107,13 +7330,6 @@
     {
       "id": "ru_noun_сосна",
       "text": "сосна",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_барин",
-      "text": "барин",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -8168,23 +7384,9 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_съезд",
-      "text": "съезд",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_эксперимент",
       "text": "эксперимент",
       "difficulty": "medium",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_боцман",
-      "text": "боцман",
-      "difficulty": "easy",
       "category": "noun",
       "enabled": true
     },
@@ -8226,13 +7428,6 @@
     {
       "id": "ru_noun_почта",
       "text": "почта",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
-      "id": "ru_noun_монах",
-      "text": "монах",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true
@@ -8343,13 +7538,6 @@
       "enabled": true
     },
     {
-      "id": "ru_noun_реформа",
-      "text": "реформа",
-      "difficulty": "easy",
-      "category": "noun",
-      "enabled": true
-    },
-    {
       "id": "ru_noun_долина",
       "text": "долина",
       "difficulty": "easy",
@@ -8401,6 +7589,818 @@
     {
       "id": "ru_noun_рай",
       "text": "рай",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_схема",
+      "text": "схема",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_несчастье",
+      "text": "несчастье",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_спасение",
+      "text": "спасение",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_альбом",
+      "text": "альбом",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_блюдо",
+      "text": "блюдо",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_мебель",
+      "text": "мебель",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_спальня",
+      "text": "спальня",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_стремление",
+      "text": "стремление",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_облегчение",
+      "text": "облегчение",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_сок",
+      "text": "сок",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_подозрение",
+      "text": "подозрение",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_ручей",
+      "text": "ручей",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_общение",
+      "text": "общение",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_колбаса",
+      "text": "колбаса",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_любитель",
+      "text": "любитель",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_легенда",
+      "text": "легенда",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_испытание",
+      "text": "испытание",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_мышка",
+      "text": "мышка",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_челюсть",
+      "text": "челюсть",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_ремонт",
+      "text": "ремонт",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_телеграмма",
+      "text": "телеграмма",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_уголь",
+      "text": "уголь",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_согласие",
+      "text": "согласие",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_звон",
+      "text": "звон",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_заказ",
+      "text": "заказ",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_практика",
+      "text": "практика",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_стойка",
+      "text": "стойка",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_интеллигенция",
+      "text": "интеллигенция",
+      "difficulty": "hard",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_лампочка",
+      "text": "лампочка",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_ген",
+      "text": "ген",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_мышца",
+      "text": "мышца",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_благодарность",
+      "text": "благодарность",
+      "difficulty": "hard",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_категория",
+      "text": "категория",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_пуговица",
+      "text": "пуговица",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_наступление",
+      "text": "наступление",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_козёл",
+      "text": "козёл",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_образец",
+      "text": "образец",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_выполнение",
+      "text": "выполнение",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_падение",
+      "text": "падение",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_имущество",
+      "text": "имущество",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_ток",
+      "text": "ток",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_приезд",
+      "text": "приезд",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_пляж",
+      "text": "пляж",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_сюжет",
+      "text": "сюжет",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_слон",
+      "text": "слон",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_богатство",
+      "text": "богатство",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_базар",
+      "text": "базар",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_проволока",
+      "text": "проволока",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_ярость",
+      "text": "ярость",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_аэропорт",
+      "text": "аэропорт",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_длина",
+      "text": "длина",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_авторитет",
+      "text": "авторитет",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_туфля",
+      "text": "туфля",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_кризис",
+      "text": "кризис",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_жидкость",
+      "text": "жидкость",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_оркестр",
+      "text": "оркестр",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_дыра",
+      "text": "дыра",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_обвинение",
+      "text": "обвинение",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_рис",
+      "text": "рис",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_маршрут",
+      "text": "маршрут",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_определение",
+      "text": "определение",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_приступ",
+      "text": "приступ",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_крепость",
+      "text": "крепость",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_треск",
+      "text": "треск",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_интервью",
+      "text": "интервью",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_сумерки",
+      "text": "сумерки",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_учительница",
+      "text": "учительница",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_конверт",
+      "text": "конверт",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_анекдот",
+      "text": "анекдот",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_трамвай",
+      "text": "трамвай",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_квартал",
+      "text": "квартал",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_риск",
+      "text": "риск",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_фабрика",
+      "text": "фабрика",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_оболочка",
+      "text": "оболочка",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_описание",
+      "text": "описание",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_свидетельство",
+      "text": "свидетельство",
+      "difficulty": "hard",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_взор",
+      "text": "взор",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_заведение",
+      "text": "заведение",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_архив",
+      "text": "архив",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_замысел",
+      "text": "замысел",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_курсант",
+      "text": "курсант",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_полотенце",
+      "text": "полотенце",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_инструкция",
+      "text": "инструкция",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_маг",
+      "text": "маг",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_лужа",
+      "text": "лужа",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_пьеса",
+      "text": "пьеса",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_раздражение",
+      "text": "раздражение",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_телевидение",
+      "text": "телевидение",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_жильё",
+      "text": "жильё",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_процедура",
+      "text": "процедура",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_натура",
+      "text": "натура",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_маска",
+      "text": "маска",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_конкурс",
+      "text": "конкурс",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_технология",
+      "text": "технология",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_рёв",
+      "text": "рёв",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_струя",
+      "text": "струя",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_аккумулятор",
+      "text": "аккумулятор",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_кисть",
+      "text": "кисть",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_проведение",
+      "text": "проведение",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_ставка",
+      "text": "ставка",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_провод",
+      "text": "провод",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_стрельба",
+      "text": "стрельба",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_реклама",
+      "text": "реклама",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_комендант",
+      "text": "комендант",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_премьера",
+      "text": "премьера",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_поцелуй",
+      "text": "поцелуй",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_прогулка",
+      "text": "прогулка",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_орёл",
+      "text": "орёл",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_прогресс",
+      "text": "прогресс",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_трудность",
+      "text": "трудность",
+      "difficulty": "medium",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_кислота",
+      "text": "кислота",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_юбка",
+      "text": "юбка",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_полдень",
+      "text": "полдень",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_овраг",
+      "text": "овраг",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_череп",
+      "text": "череп",
+      "difficulty": "easy",
+      "category": "noun",
+      "enabled": true
+    },
+    {
+      "id": "ru_noun_доверие",
+      "text": "доверие",
       "difficulty": "easy",
       "category": "noun",
       "enabled": true

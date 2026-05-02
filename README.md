@@ -4,8 +4,6 @@ A party game similar to Alias where teams take turns explaining, acting out, or 
 
 ## Features
 
-## Features
-
 - Play with multiple teams
 - Four distinct game rounds with different rules:
   1. Explanation Round
