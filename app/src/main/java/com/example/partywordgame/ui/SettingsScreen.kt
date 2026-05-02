@@ -105,7 +105,7 @@ fun SettingsScreen(
                 onClick = onDictionaryStatsClicked,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Dictionary Stats")
+                Text("Dictionary Info")
             }
 
             Button(

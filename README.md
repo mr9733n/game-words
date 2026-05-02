@@ -4,16 +4,43 @@ A party game similar to Alias where teams take turns explaining, acting out, or 
 
 ## Features
 
+## Features
+
 - Play with multiple teams
 - Four distinct game rounds with different rules:
-  1. Explanation Round - Describe the word without using related terms
-  2. Charades Round - Act out the word with gestures only
-  3. One Word Round - Give only a single clue word
-  4. Drawing Round - Draw the word (offline)
-- Configurable game settings (word bulk size, team count, round count, turn duration)
+  1. Explanation Round
+  2. Charades Round
+  3. One Word Round
+  4. Drawing Round
+
+- Configurable game settings:
+  - word bulk size
+  - team count
+  - round count
+  - turn duration
+  - word difficulty
+
+- Word dictionary system:
+  - JSON dictionary import
+  - Local Room database storage
+  - Filtering by difficulty
+  - Enable / disable words
+
+- Word Management screen:
+  - search words
+  - filter by difficulty
+  - toggle enabled/disabled
+  - bulk enable/disable
+
+- Records system:
+  - game history
+  - expandable records
+  - list of used words per game
+
 - Offline gameplay with persistent state
 - Fair word distribution between teams
-- Prevents word overlap between concurrent game sessions
+- Prevents word reuse between sessions
+
 
 ## Getting Started
 
@@ -60,3 +87,10 @@ The app follows MVVM architecture pattern:
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Dictionary License
+
+- OpenRussian / Badestrand russian-dictionary
+- License: CC-BY-SA-4.0 
+- See the THIRD_PARTY.md file for details.
+- See https://github.com/Badestrand/russian-dictionary for details.
