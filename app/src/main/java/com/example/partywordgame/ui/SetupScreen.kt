@@ -17,6 +17,9 @@ fun SetupScreen(
 ) {
     var bulkSize by remember { mutableStateOf(40) }
     var teamCount by remember { mutableStateOf(2) }
+    var teamNames by remember {
+        mutableStateOf(List(8) { index -> "Team ${index + 1}" })
+    }
     var roundCount by remember { mutableStateOf(4) }
     var turnDuration by remember { mutableStateOf(60) }
     
@@ -73,6 +76,28 @@ fun SetupScreen(
                     )
                     IconButton(onClick = { if (teamCount < 8) teamCount++ }) {
                         Text("+", style = MaterialTheme.typography.h6)
+                    }
+                }
+            }
+
+            SettingRow(
+                label = "Teams names",
+                modifier = Modifier.padding(vertical = 8.dp)
+            ) {
+                Column {
+                    repeat(teamCount) { index ->
+                        OutlinedTextField(
+                            value = teamNames[index],
+                            onValueChange = { value ->
+                                teamNames = teamNames.toMutableList().also {
+                                    it[index] = value
+                                }
+                            },
+                            label = { Text("Team ${index + 1} name") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                        )
                     }
                 }
             }
@@ -142,14 +167,16 @@ fun SetupScreen(
                             bulkSize = 5,
                             teamCount = 2,
                             roundCount = 2,
-                            turnDurationSeconds = 15
+                            turnDurationSeconds = 15,
+                            teamNames = listOf("Test Team 1", "Test Team 2")
                         )
                     } else {
                         GameSettings(
                             bulkSize = bulkSize,
                             teamCount = teamCount,
                             roundCount = roundCount,
-                            turnDurationSeconds = turnDuration
+                            turnDurationSeconds = turnDuration,
+                            teamNames = teamNames.take(teamCount)
                         )
                     }
 

@@ -13,6 +13,7 @@ fun HomeScreen(
     onNewGameClick: () -> Unit,
     onResumeGameClick: () -> Unit,
     onSettingsClick: () -> Unit,
+    onRecordsClick: () -> Unit,
     isResumeEnabled: Boolean
 ) {
     Column(
@@ -44,6 +45,13 @@ fun HomeScreen(
                 .padding(vertical = 8.dp)
         ) {
             Text("Resume Game")
+        }
+
+        Button(
+            onClick = onRecordsClick,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Records")
         }
 
         Button(

@@ -8,6 +8,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.background
+import androidx.compose.ui.graphics.Color
+import com.example.partywordgame.models.teamColors
+import com.example.partywordgame.audio.SoundPlayer
 import com.example.partywordgame.models.GameState
 import com.example.partywordgame.models.WordState
 
@@ -25,6 +32,8 @@ fun GameScreen(
     onRestartGame: () -> Unit
 ) {
     val currentWord = gameState.wordBulk[gameState.current.wordIndex]
+    val currentTeam = gameState.teams[gameState.current.teamIndex]
+    val currentTeamColor = teamColors[currentTeam.colorIndex % teamColors.size]
     
     Column(
         modifier = Modifier
@@ -42,11 +51,12 @@ fun GameScreen(
                 text = "Round ${gameState.current.round}",
                 style = MaterialTheme.typography.h3
             )
-            
+
             Text(
-                text = "Team ${gameState.current.teamIndex + 1}",
+                text = currentTeam.name,
                 style = MaterialTheme.typography.h4,
                 fontWeight = FontWeight.Bold,
+                color = currentTeamColor,
                 modifier = Modifier.padding(top = 4.dp)
             )
             
@@ -58,13 +68,29 @@ fun GameScreen(
             )
 
             // Timer display
+            val context = LocalContext.current
+            val soundPlayer = remember { SoundPlayer(context) }
+
+            LaunchedEffect(timeLeft) {
+                if (timeLeft == 1) {
+                    soundPlayer.playNotificationSound()
+                }
+            }
+
             val timerColor = if (timeLeft <= 10) {
                 MaterialTheme.colors.error
             } else {
                 MaterialTheme.colors.onBackground
             }
+
+            val timerText = if (timeLeft <= 10) {
+                "⏰ ${formatTime(timeLeft)}"
+            } else {
+                formatTime(timeLeft)
+            }
+
             Text(
-                text = formatTime(timeLeft),
+                text = timerText,
                 color = timerColor,
                 style = MaterialTheme.typography.h1,
                 fontWeight = FontWeight.Bold,

@@ -6,6 +6,7 @@ enum class ScreenState {
     GAME,
     SUMMARY,
     FINAL,
-    SETTINGS
+    SETTINGS,
+    RECORDS
 }
 

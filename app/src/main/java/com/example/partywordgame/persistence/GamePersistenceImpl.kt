@@ -8,6 +8,12 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.partywordgame.models.GameState
+import com.example.partywordgame.models.GameRecord
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import kotlinx.coroutines.flow.first
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.decodeFromString
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.decodeFromString
@@ -25,6 +31,7 @@ class GamePersistenceImpl(private val context: Context) : GamePersistence {
     companion object {
         private val GAME_STATE_KEY = stringPreferencesKey("game_state")
         private val ACTIVE_WORDS_KEY = stringPreferencesKey("active_words")
+        private val GAME_RECORDS_KEY = stringPreferencesKey("game_records")
         private val TAG = "GamePersistenceImpl"
     }
     
@@ -96,6 +103,36 @@ class GamePersistenceImpl(private val context: Context) : GamePersistence {
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error removing active words", e)
+        }
+    }
+
+    override suspend fun saveGameRecord(record: GameRecord) {
+        val records = getGameRecords()
+        val updatedRecords = listOf(record) + records
+
+        context.dataStore.edit { preferences ->
+            preferences[GAME_RECORDS_KEY] = json.encodeToString(updatedRecords)
+        }
+    }
+
+    override suspend fun getGameRecords(): List<GameRecord> {
+        return try {
+            val preferences = context.dataStore.data.first()
+            val recordsJson = preferences[GAME_RECORDS_KEY] ?: return emptyList()
+            json.decodeFromString<List<GameRecord>>(recordsJson)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting game records", e)
+            emptyList()
+        }
+    }
+
+    override suspend fun clearGameRecords() {
+        try {
+            context.dataStore.edit { preferences ->
+                preferences.remove(GAME_RECORDS_KEY)
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error clearing game records", e)
         }
     }
 }

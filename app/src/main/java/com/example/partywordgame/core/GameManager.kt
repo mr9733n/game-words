@@ -12,9 +12,14 @@ class GameManager {
     fun startNewGame(settings: GameSettings, excludedWords: Set<String> = emptySet()): GameState {
         val dictionary = WordDictionary()
         val words = dictionary.selectWordBatch(settings.bulkSize, excludedWords)
-        
-        val teams = (1..settings.teamCount).map { 
-            Team(id = "team_$it", score = 0) 
+
+        val teams = (0 until settings.teamCount).map { index ->
+            Team(
+                id = "team_$index",
+                name = settings.teamNames.getOrNull(index)?.takeIf { it.isNotBlank() }
+                    ?: "Team ${index + 1}",
+                colorIndex = index
+            )
         }
         
         gameState = GameState(
@@ -25,7 +30,7 @@ class GameManager {
             wordBulk = words.map { it.copy(state = WordState.AVAILABLE) },
             current = CurrentTurn(round = 1, teamIndex = 0, wordIndex = 0)
         )
-        
+
         return gameState!!
     }
     

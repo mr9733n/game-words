@@ -10,11 +10,17 @@ import com.example.partywordgame.models.GameState
 import com.example.partywordgame.models.WordState
 import com.example.partywordgame.persistence.GamePersistence
 import com.example.partywordgame.persistence.GamePersistenceImpl
+import com.example.partywordgame.models.GameRecord
+import com.example.partywordgame.models.GameStatus
+import com.example.partywordgame.models.TeamScore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class GameViewModel(application: Application) : AndroidViewModel(application) {
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage
+
     private val gameManager = GameManager()
     private val persistence: GamePersistence = GamePersistenceImpl(application)
     
@@ -34,6 +40,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _currentMode = MutableStateFlow(GameMode.NORMAL)
     val currentMode: StateFlow<GameMode> = _currentMode
+
+    private val _records = MutableStateFlow<List<GameRecord>>(emptyList())
+    val records: StateFlow<List<GameRecord>> = _records
 
     init {
         viewModelScope.launch {
@@ -112,6 +121,15 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
             } catch (e: Exception) {
                 e.printStackTrace()
+
+                _errorMessage.value = when {
+                    e.message?.contains("Insufficient", ignoreCase = true) == true ->
+                        "Not enough available words. Clear active words in Settings or reduce bulk size.\n" +
+                                "Go to Settings: -> Clear Active Words"
+
+                    else ->
+                        "Failed to start game: ${e.message ?: "unknown error"}"
+                }
             }
         }
     }
@@ -288,34 +306,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun restartGame() {
-        val currentState = _gameState.value ?: return
-
-        val resetWords = currentState.wordBulk.map {
-            it.copy(state = WordState.AVAILABLE)
-        }
-
-        val resetTeams = currentState.teams.map {
-            it.copy(score = 0, roundScore = 0)
-        }
-
-        val newState = currentState.copy(
-            status = com.example.partywordgame.models.GameStatus.ACTIVE,
-            teams = resetTeams,
-            wordBulk = resetWords,
-            current = currentState.current.copy(
-                round = 1,
-                teamIndex = 0,
-                wordIndex = 0
-            )
-        )
-
-        _gameState.value = newState
-        _screenState.value = ScreenState.GAME
-        resetTimer(newState.settings.turnDurationSeconds)
-
-        viewModelScope.launch {
-            persistence.saveGameState(newState)
-        }
+        stopTimer()
+        _isTimerRunning.value = false
+        _screenState.value = ScreenState.SETUP
     }
 
     fun moveToNextTurn() {
@@ -493,6 +486,10 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun showRecordsScreen() {
+        _screenState.value = ScreenState.RECORDS
+    }
+
     fun finishGame() {
         val currentState = _gameState.value ?: return
 
@@ -500,6 +497,23 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             status = com.example.partywordgame.models.GameStatus.FINISHED
         )
 
+        val maxScore = finalState.teams.maxOfOrNull { it.score } ?: 0
+        val winners = finalState.teams.filter { it.score == maxScore }
+
+        val record = GameRecord(
+            id = finalState.gameId,
+            finishedAt = System.currentTimeMillis(),
+            winnerName = if (winners.size == 1) winners.first().name else null,
+            isTie = winners.size > 1,
+            scores = finalState.teams.map {
+                TeamScore(
+                    teamName = it.name,
+                    score = it.score
+                )
+            }
+        )
+
+        _records.value = listOf(record) + _records.value
         _gameState.value = finalState
         _screenState.value = ScreenState.FINAL
         stopTimer()
@@ -508,7 +522,11 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             val wordSetText = finalState.wordBulk.map { it.text }.toSet()
             persistence.removeActiveWords(wordSetText)
             persistence.saveGameState(finalState)
+
+            persistence.saveGameRecord(record)
+            _records.value = persistence.getGameRecords()
         }
+        _screenState.value = ScreenState.FINAL
     }
     
     private fun startTimer() {
@@ -541,15 +559,23 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         stopTimer()
         _timeLeft.value = duration
     }
-    
+
     private suspend fun loadSavedGame() {
         try {
             val savedState = persistence.loadGameState()
-            if (savedState != null && savedState.status != com.example.partywordgame.models.GameStatus.FINISHED) {
+
+            if (savedState != null && savedState.status != GameStatus.FINISHED) {
                 _gameState.value = savedState
             }
+
+            _records.value = persistence.getGameRecords()
+
         } catch (e: Exception) {
             // Handle error
         }
+    }
+
+    fun clearError() {
+        _errorMessage.value = null
     }
 }

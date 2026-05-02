@@ -1,6 +1,7 @@
 package com.example.partywordgame.persistence
 
 import com.example.partywordgame.models.GameState
+import com.example.partywordgame.models.GameRecord
 
 interface GamePersistence {
     /**
@@ -33,4 +34,15 @@ interface GamePersistence {
      * Removes words from active words when a game ends
      */
     suspend fun removeActiveWords(words: Set<String>)
+
+    /**
+     * Game records persistence
+     * Save, Get, Clear
+     */
+    suspend fun saveGameRecord(record: GameRecord)
+
+    suspend fun getGameRecords(): List<GameRecord>
+
+    suspend fun clearGameRecords()
+
 }

@@ -3,6 +3,9 @@ package com.example.partywordgame.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import com.example.partywordgame.viewmodel.GameViewModel
 import com.example.partywordgame.viewmodel.ScreenState
 
@@ -10,18 +13,26 @@ import com.example.partywordgame.viewmodel.ScreenState
 fun PartyWordGameApp(
     viewModel: GameViewModel = viewModel()
 ) {
+    val errorMessage = viewModel.errorMessage.collectAsState().value
     val screenState = viewModel.screenState.collectAsState().value
     val gameState = viewModel.gameState.collectAsState().value
     val timeLeft = viewModel.timeLeft.collectAsState().value
     val isTimerRunning = viewModel.isTimerRunning.collectAsState().value
     val currentMode = viewModel.currentMode.collectAsState().value
+    val records = viewModel.records.collectAsState().value
 
     when (screenState) {
         ScreenState.HOME -> HomeScreen(
             onNewGameClick = { viewModel.showSetupScreen() },
             onResumeGameClick = { viewModel.resumeGame() },
             onSettingsClick = { viewModel.showSettingsScreen() },
+            onRecordsClick = { viewModel.showRecordsScreen() },
             isResumeEnabled = viewModel.canResumeGame()
+        )
+
+        ScreenState.RECORDS -> RecordsScreen(
+            records = records,
+            onBackClicked = { viewModel.showHomeScreen() }
         )
 
         ScreenState.SETTINGS -> SettingsScreen(
@@ -75,5 +86,18 @@ fun PartyWordGameApp(
                 )
             }
         }
+    }
+
+    if (errorMessage != null) {
+        AlertDialog(
+            onDismissRequest = { viewModel.clearError() },
+            title = { Text("Cannot start game") },
+            text = { Text(errorMessage) },
+            confirmButton = {
+                Button(onClick = { viewModel.clearError() }) {
+                    Text("OK")
+                }
+            }
+        )
     }
 }
