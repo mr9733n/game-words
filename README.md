@@ -1,6 +1,6 @@
 # Party Word Game
 
-An Android party game similar to Alias where teams take turns explaining, acting out, or drawing words.
+A party game similar to Alias where teams take turns explaining, acting out, or drawing words.
 
 ## Features
 
