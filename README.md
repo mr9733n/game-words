@@ -40,6 +40,88 @@ A party game similar to Alias where teams take turns explaining, acting out, or 
 - Prevents word reuse between sessions
 
 
+## Dictionary Curation Workflow
+
+The project uses a staged dictionary curation process.
+
+### Step 1 — Generate a batch
+
+```bash
+python create_dictionary.py make-batch
+````
+
+This will create:
+
+```
+tools/dictionary/curation/current_batch.csv
+```
+
+---
+
+### Step 2 — Review words
+
+Open `current_batch.csv` and fill the `decision` column:
+
+| decision | meaning                         |
+| -------- | ------------------------------- |
+| approve  | include in game                 |
+| disable  | include but disabled by default |
+| reject   | exclude from dictionary         |
+
+---
+
+### Step 3 — Apply decisions
+
+```bash
+python create_dictionary.py apply-batch
+```
+
+This updates:
+
+```
+approved.txt
+disabled.txt
+rejected.txt
+```
+
+---
+
+### Step 4 — Repeat
+
+Generate next batch:
+
+```bash
+python create_dictionary.py make-batch
+```
+
+Already reviewed words will be skipped.
+
+---
+
+### Step 5 — Build final dictionary
+
+```bash
+python create_dictionary.py build-json
+```
+
+---
+
+### Step 6 — Import into app
+
+In the app:
+
+```
+Settings → Clear Dictionary → Import Dictionary
+```
+
+### Dictionary size target
+
+- Target: ~1200 curated words
+- Batch size: 100 words
+- Estimated effort: ~10–15 batches
+
+---
+
 ## Getting Started
 
 ### Prerequisites

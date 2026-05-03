@@ -6,8 +6,9 @@
 /obsolete
 /input
 /build
-/obsolete
-/build
 /Key
 /app/debug
 /app/release
+/tools/dictionary
+/tools/input
+/tools/output
