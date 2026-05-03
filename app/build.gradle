@@ -9,7 +9,7 @@ ext {
     compose_version = '1.6.0'
 }
 
-def buildVersionCode = Integer.parseInt(new Date().format("yyyyMMdd"))
+def buildVersionCode = (System.currentTimeMillis() / 1000L).toInteger()
 
 android {
     namespace 'com.example.partywordgame'
