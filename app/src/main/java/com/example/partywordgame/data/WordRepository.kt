@@ -102,7 +102,7 @@ class WordRepository(
         lastDictionaryMeta = dictionary
 
         val entities = dictionary.words
-            .filter { it.enabled }
+            //.filter { it.enabled }
             .map {
                 WordEntity(
                     id = it.id,
@@ -136,6 +136,10 @@ class WordRepository(
         }
 
         return entities.size
+    }
+
+    suspend fun countDisabledWords(): Int {
+        return wordDao.countDisabledWords()
     }
 
     suspend fun clearDictionary() {

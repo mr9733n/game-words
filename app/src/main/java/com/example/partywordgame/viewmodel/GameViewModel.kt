@@ -62,17 +62,35 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private val _showDisabledWords = MutableStateFlow(false)
     val showDisabledWords: StateFlow<Boolean> = _showDisabledWords
 
-    fun toggleShowDisabledWords() {
-        _showDisabledWords.value = !_showDisabledWords.value
-        searchWords()
-    }
-
     init {
         viewModelScope.launch {
             loadSavedGame()
         }
     }
-    
+
+    private suspend fun loadSavedGame() {
+        try {
+            val savedState = persistence.loadGameState()
+
+            if (savedState != null && savedState.status != GameStatus.FINISHED) {
+                _gameState.value = savedState
+            }
+
+            _records.value = persistence.getGameRecords()
+            wordRepository.importDictionaryIfNeeded()
+
+        } catch (e: Exception) {
+            // Handle error
+        }
+    }
+
+    fun clearError() {
+        _errorMessage.value = null
+    }
+
+    /**
+     * Home Screen
+     */
     fun showHomeScreen() {
         _screenState.value = ScreenState.HOME
     }
@@ -81,21 +99,32 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         _screenState.value = ScreenState.SETTINGS
     }
 
-    fun resetSavedState() {
-        viewModelScope.launch {
-            persistence.clearGameState()
-            _gameState.value = null
-            _screenState.value = ScreenState.HOME
+    fun showSetupScreen() {
+        _screenState.value = ScreenState.SETUP
+    }
+
+    fun showRecordsScreen() {
+        _screenState.value = ScreenState.RECORDS
+    }
+
+    /**
+     * Resume Game
+     */
+    fun resumeGame() {
+        _screenState.value = ScreenState.GAME
+        _gameState.value?.let { gameState ->
+            resetTimer(gameState.settings.turnDurationSeconds)
         }
     }
 
-    fun clearActiveWords() {
-        viewModelScope.launch {
-            val activeWords = persistence.getActiveWords()
-            persistence.removeActiveWords(activeWords)
-        }
+    fun canResumeGame(): Boolean {
+        return _gameState.value != null && _gameState.value?.status != GameStatus.FINISHED
     }
 
+    /**
+     * Game mode
+     *
+    */
     fun setTestMode() {
         _currentMode.value = GameMode.TEST
     }
@@ -103,11 +132,10 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     fun setGameMode() {
         _currentMode.value = GameMode.NORMAL
     }
-    
-    fun showSetupScreen() {
-        _screenState.value = ScreenState.SETUP
-    }
 
+    /**
+     * Game Setup
+     */
     fun startNewGame(settings: GameSettings) {
         viewModelScope.launch {
             try {
@@ -163,18 +191,95 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
-    
-    fun resumeGame() {
-        _screenState.value = ScreenState.GAME
-        _gameState.value?.let { gameState ->
-            resetTimer(gameState.settings.turnDurationSeconds)
+
+    /**
+     * Settings
+     */
+    fun resetSavedState() {
+        viewModelScope.launch {
+            persistence.clearGameState()
+            _gameState.value = null
+            _screenState.value = ScreenState.HOME
         }
     }
-    
-    fun canResumeGame(): Boolean {
-        return _gameState.value != null && _gameState.value?.status != GameStatus.FINISHED
+
+    fun clearActiveWords() {
+        viewModelScope.launch {
+            val activeWords = persistence.getActiveWords()
+            persistence.removeActiveWords(activeWords)
+        }
     }
 
+    fun importDictionary() {
+        viewModelScope.launch {
+            try {
+                val count = wordRepository.importDefaultDictionaryFromAssets()
+                _errorMessage.value = "Dictionary imported: $count words"
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.value = "Failed to import dictionary: ${e.message ?: "unknown error"}"
+            }
+        }
+    }
+
+    fun clearDictionary() {
+        viewModelScope.launch {
+            try {
+                wordRepository.clearDictionary()
+                _errorMessage.value = "Dictionary cleared"
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.value = "Failed to clear dictionary: ${e.message ?: "unknown error"}"
+            }
+        }
+    }
+
+    fun showDictionaryStats() {
+        viewModelScope.launch {
+            try {
+                val total = wordRepository.countAllWords()
+                val enabled = wordRepository.countEnabledWords()
+                val disabled = wordRepository.countDisabledWords()
+                val active = persistence.getActiveWords().size
+
+                _errorMessage.value = """
+                Dictionary Info
+
+                Total words: $total
+                Enabled: $enabled
+                Disabled: $disabled
+                Active words: $active
+
+                Source:
+                OpenRussian / Badestrand russian-dictionary
+
+                License:
+                CC-BY-SA-4.0
+            """.trimIndent()
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.value = "Failed to load dictionary stats: ${e.message ?: "unknown error"}"
+            }
+        }
+    }
+
+    fun clearRecords() {
+        viewModelScope.launch {
+            try {
+                persistence.clearGameRecords()
+                _records.value = emptyList()
+                _errorMessage.value = "Records cleared"
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.value = "Failed to clear records: ${e.message ?: "unknown error"}"
+            }
+        }
+    }
+
+    /**
+     * In Game
+     */
     fun startTurn() {
         val currentState = _gameState.value ?: return
 
@@ -516,9 +621,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun showRecordsScreen() {
-        _screenState.value = ScreenState.RECORDS
-    }
+
+
+
 
     fun finishGame() {
         val currentState = _gameState.value ?: return
@@ -589,75 +694,17 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         _timeLeft.value = duration
     }
 
-    private suspend fun loadSavedGame() {
-        try {
-            val savedState = persistence.loadGameState()
-
-            if (savedState != null && savedState.status != GameStatus.FINISHED) {
-                _gameState.value = savedState
-            }
-
-            _records.value = persistence.getGameRecords()
-            wordRepository.importDictionaryIfNeeded()
-
-        } catch (e: Exception) {
-            // Handle error
-        }
-    }
-
-    fun clearError() {
-        _errorMessage.value = null
-    }
-
-    fun importDictionary() {
-        viewModelScope.launch {
-            try {
-                val count = wordRepository.importDefaultDictionaryFromAssets()
-                _errorMessage.value = "Dictionary imported: $count words"
-            } catch (e: Exception) {
-                e.printStackTrace()
-                _errorMessage.value = "Failed to import dictionary: ${e.message ?: "unknown error"}"
-            }
-        }
-    }
-
-    fun clearDictionary() {
-        viewModelScope.launch {
-            try {
-                wordRepository.clearDictionary()
-                _errorMessage.value = "Dictionary cleared"
-            } catch (e: Exception) {
-                e.printStackTrace()
-                _errorMessage.value = "Failed to clear dictionary: ${e.message ?: "unknown error"}"
-            }
-        }
-    }
-
-    fun showDictionaryStats() {
-        viewModelScope.launch {
-            try {
-                val total = wordRepository.countAllWords()
-                val enabled = wordRepository.countEnabledWords()
-                val meta = wordRepository.getLastDictionaryMeta()
-
-                _errorMessage.value = buildString {
-                    append("Dictionary: $enabled enabled / $total total")
-
-                    meta?.let {
-                        append("\nSource: ${it.source}")
-                        append("\nLicense: ${it.license}")
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                _errorMessage.value = "Failed to load dictionary stats: ${e.message ?: "unknown error"}"
-            }
-        }
-    }
-
+    /**
+     * Words
+     */
     fun showWordManagementScreen() {
         _screenState.value = ScreenState.WORD_MANAGEMENT
         searchWords("")
+    }
+
+    fun toggleShowDisabledWords() {
+        _showDisabledWords.value = !_showDisabledWords.value
+        searchWords()
     }
 
     fun searchWords(query: String = _wordSearchQuery.value) {

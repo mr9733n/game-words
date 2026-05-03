@@ -20,10 +20,12 @@ fun SettingsScreen(
     onClearActiveWordsClicked: () -> Unit,
     onTestModeClicked: () -> Unit,
     onGameModeClicked: () -> Unit,
-    onImportDictionaryClicked: () -> Unit,
     onDictionaryStatsClicked: () -> Unit,
     onWordManagementClicked: () -> Unit,
-    onClearDictionaryClicked: () -> Unit
+    onImportDictionaryClicked: () -> Unit,
+    onClearDictionaryClicked: () -> Unit,
+    onClearRecordsClicked: () -> Unit,
+
 ) {
     Scaffold(
         topBar = {
@@ -52,6 +54,13 @@ fun SettingsScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Clear Active Words")
+            }
+
+            Button(
+                onClick = onClearRecordsClicked,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Clear Records")
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -89,6 +98,13 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            Button(
+                onClick = onDictionaryStatsClicked,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Dictionary Info")
+            }
+
             Text(
                 text = "Words Dictionary",
                 style = MaterialTheme.typography.h6
@@ -99,13 +115,6 @@ fun SettingsScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Import Dictionary")
-            }
-
-            Button(
-                onClick = onDictionaryStatsClicked,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Dictionary Info")
             }
 
             Button(

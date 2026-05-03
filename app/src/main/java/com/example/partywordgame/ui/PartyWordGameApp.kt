@@ -50,6 +50,7 @@ fun PartyWordGameApp(
             onDictionaryStatsClicked = { viewModel.showDictionaryStats() },
             onClearDictionaryClicked = { viewModel.clearDictionary() },
             onWordManagementClicked = { viewModel.showWordManagementScreen() },
+            onClearRecordsClicked = { viewModel.clearRecords() },
         )
 
         ScreenState.WORD_MANAGEMENT -> WordManagementScreen(

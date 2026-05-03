@@ -49,6 +49,9 @@ interface WordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWords(words: List<WordEntity>)
 
+    @Query("SELECT COUNT(*) FROM words WHERE enabled = 0")
+    suspend fun countDisabledWords(): Int
+
     @Query("UPDATE words SET enabled = :enabled WHERE id = :wordId")
     suspend fun setWordEnabled(wordId: String, enabled: Boolean)
 

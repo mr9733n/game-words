@@ -9,6 +9,8 @@ ext {
     compose_version = '1.6.0'
 }
 
+def buildVersionCode = Integer.parseInt(new Date().format("yyyyMMdd"))
+
 android {
     namespace 'com.example.partywordgame'
     compileSdk 34
@@ -17,8 +19,8 @@ android {
         applicationId "com.example.partywordgame"
         minSdk 24
         targetSdk 34
-        versionCode = System.currentTimeMillis().toInt()
-        versionName "1.0.3"
+        versionCode buildVersionCode
+        versionName "1.0.3.${buildVersionCode}"
     }
 
     buildFeatures {
