@@ -42,29 +42,6 @@ fun SettingsScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
-            Button(
-                onClick = onResetStateClicked,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Reset Saved Game")
-            }
-
-            Button(
-                onClick = onClearActiveWordsClicked,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Clear Active Words")
-            }
-
-            Button(
-                onClick = onClearRecordsClicked,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Clear Records")
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
             Text(
                 text = "Mode",
                 style = MaterialTheme.typography.h6
@@ -99,16 +76,46 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(
+                onClick = onResetStateClicked,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Reset Saved Game")
+            }
+
+            Button(
+                onClick = onClearActiveWordsClicked,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Clear Active Words")
+            }
+
+            Button(
+                onClick = onClearRecordsClicked,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Clear Records")
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Words Dictionary",
+                style = MaterialTheme.typography.h6
+            )
+
+            Button(
                 onClick = onDictionaryStatsClicked,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Dictionary Info")
             }
 
-            Text(
-                text = "Words Dictionary",
-                style = MaterialTheme.typography.h6
-            )
+            Button(
+                onClick = onWordManagementClicked,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Word Management")
+            }
 
             Button(
                 onClick = onImportDictionaryClicked,
@@ -122,13 +129,6 @@ fun SettingsScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Clear Dictionary")
-            }
-
-            Button(
-                onClick = onWordManagementClicked,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Word Management")
             }
 
             Spacer(modifier = Modifier.height(8.dp))
