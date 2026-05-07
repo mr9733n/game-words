@@ -309,8 +309,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         val updatedState = currentState.copy(
             wordBulk = updatedWords,
             current = currentState.current.copy(
-                wordIndex = wordIndex,
-                skippedWordIdsInTurn = emptyList()
+                wordIndex = wordIndex
             )
         )
 
@@ -429,7 +428,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             wordBulk = resetWords,
             current = currentState.current.copy(
                 teamIndex = 0,
-                wordIndex = 0
+                wordIndex = 0,
+                skippedWordIdsInTurn = emptyList()
             )
         )
 
@@ -543,7 +543,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             current = currentState.current.copy(
                 round = currentState.current.round + 1,
                 teamIndex = nextRoundStartingTeamIndex,
-                wordIndex = 0
+                wordIndex = 0,
+                skippedWordIdsInTurn = emptyList()
             )
         )
 
@@ -620,10 +621,6 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             persistence.saveGameState(newState)
         }
     }
-
-
-
-
 
     fun finishGame() {
         val currentState = _gameState.value ?: return
