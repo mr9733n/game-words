@@ -21,19 +21,28 @@ A party game similar to Alias where teams take turns explaining, acting out, or 
 - Word dictionary system:
   - JSON dictionary import
   - Local Room database storage
+  - Safe bundled dictionary updates
   - Filtering by difficulty
   - Enable / disable words
+  - Custom user-added words
 
 - Word Management screen:
   - search words
   - filter by difficulty
   - toggle enabled/disabled
   - bulk enable/disable
+  - add custom words with difficulty and visibility settings
 
 - Records system:
   - game history
   - expandable records
   - list of used words per game
+  - skipped word penalties and net score tracking
+
+- Gameplay scoring:
+  - separate missed and skipped word actions
+  - limited skips per turn
+  - skipped words count as penalties
 
 - Offline gameplay with persistent state
 - Fair word distribution between teams

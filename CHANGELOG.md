@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.0.4] - 2026-05-08
+
+### Added
+
+- Separate `Missed` and `Skip` actions during a turn
+- Skip penalties with a per-turn skip limit
+- Net score calculation based on guessed words minus skipped words
+- Skipped word counts in final results and records
+- Custom word creation from the Word Management screen
+- Difficulty and enabled/disabled controls for custom words
+- Dictionary info breakdown for default, custom, and other words
+
+### Fixed
+
+- Missed words no longer reappear for the same team during the current turn
+- Pausing and resuming a turn no longer resets skipped words
+- Bundled dictionary sync now removes old default-word entries that are no longer in the JSON
+- Legacy default word IDs are cleaned up safely without deleting user-added words
+
+### Changed
+
+- `Clear Dictionary` now clears only the bundled default dictionary
+- User-added words are preserved during bundled dictionary imports and cleanup
+
 ## [1.0.3] - 2026-05-02
 
 ### Added
