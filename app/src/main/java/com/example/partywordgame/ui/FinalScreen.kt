@@ -15,8 +15,8 @@ fun FinalScreen(
     onPlayAgain: () -> Unit,
     onExit: () -> Unit
 ) {
-    val maxScore = gameState.teams.maxOfOrNull { it.score } ?: 0
-    val winners = gameState.teams.withIndex().filter { it.value.score == maxScore }
+    val maxScore = gameState.teams.maxOfOrNull { it.score - it.skippedCount } ?: 0
+    val winners = gameState.teams.withIndex().filter { it.value.score - it.value.skippedCount == maxScore }
     val isTie = winners.size > 1
     val winningTeamIndex = winners.firstOrNull()?.index
     
@@ -57,7 +57,7 @@ fun FinalScreen(
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     Text(
-                        text = "Team ${winningTeamIndex + 1}",
+                        text = gameState.teams[winningTeamIndex].name,
                         style = MaterialTheme.typography.h5,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colors.onPrimary
@@ -91,10 +91,13 @@ fun FinalScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "Team ${index + 1}" + if (winningTeamIndex == index && !isTie) " (Winner)" else "",
+                            text = team.name + if (winningTeamIndex == index && !isTie) " (Winner)" else "",
                             fontWeight = if (winningTeamIndex == index && !isTie) FontWeight.Bold else FontWeight.Normal
                         )
-                        Text(team.score.toString(), fontWeight = FontWeight.Bold)
+                        Text(
+                            text = "${team.score - team.skippedCount} (${team.score} - ${team.skippedCount})",
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
             }

@@ -7,7 +7,9 @@ data class Team(
     val name: String,
     val colorIndex: Int,
     val score: Int = 0,
-    val roundScore: Int = 0
+    val roundScore: Int = 0,
+    val skippedCount: Int = 0,
+    val roundSkippedCount: Int = 0
 )
 
 val teamColors = listOf(

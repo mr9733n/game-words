@@ -65,7 +65,7 @@ fun HomeScreen(
         }
 
         Text(
-            text = "v1.0.3 (c)2026 Полуночный игрун",
+            text = "v1.0.4 (c)2026 Полуночный игрун",
             style = MaterialTheme.typography.subtitle2,
             modifier = Modifier.padding(top = 50.dp)
         )

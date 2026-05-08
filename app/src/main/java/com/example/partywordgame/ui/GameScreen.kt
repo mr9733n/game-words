@@ -28,11 +28,14 @@ fun GameScreen(
     onNextWord: () -> Unit,
     onPause: () -> Unit,
     onRestartRound: () -> Unit,
-    onRestartGame: () -> Unit
+    onRestartGame: () -> Unit,
+    maxSkipsPerTurn: Int
 ) {
     val currentWord = gameState.wordBulk[gameState.current.wordIndex]
     val currentTeam = gameState.teams[gameState.current.teamIndex]
     val currentTeamColor = teamColors[currentTeam.colorIndex % teamColors.size]
+    val skipsUsed = gameState.current.skipCountInTurn
+    val canSkip = skipsUsed < maxSkipsPerTurn
     val screenHeight = LocalConfiguration.current.screenHeightDp
     val scale = when {
         screenHeight < 600 -> 0.75f
@@ -169,12 +172,13 @@ fun GameScreen(
 
                     Button(
                         onClick = onNextWord,
+                        enabled = canSkip,
                         modifier = Modifier
                             .weight(1f)
                             .height((48 * scale).dp),
                         colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface)
                     ) {
-                        Text("Skip", color = MaterialTheme.colors.onSurface)
+                        Text("Skip $skipsUsed/$maxSkipsPerTurn", color = MaterialTheme.colors.onSurface)
                     }
                 }
 

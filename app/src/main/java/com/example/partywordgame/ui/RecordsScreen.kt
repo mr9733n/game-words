@@ -95,7 +95,7 @@ private fun RecordCard(record: GameRecord) {
             Spacer(modifier = Modifier.height(8.dp))
 
             record.scores.forEach { score ->
-                Text("${score.teamName}: ${score.score}")
+                Text("${score.teamName}: ${score.netScore} (${score.score} - ${score.skippedCount})")
             }
 
             if (expanded) {

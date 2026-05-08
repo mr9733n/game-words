@@ -14,6 +14,11 @@ import kotlinx.serialization.json.Json
 class WordRepository(
     private val context: Context
 ) {
+    private companion object {
+        const val DEFAULT_WORD_ID_PATTERN = "ru_noun%"
+        const val CUSTOM_WORD_ID_PATTERN = "custom:%"
+    }
+
     private val wordDao = AppDatabase.getInstance(context).wordDao()
 
     private var lastDictionaryMeta: DictionaryFile? = null
@@ -116,6 +121,7 @@ class WordRepository(
             }
 
         val existingIds = wordDao.getAllWordIds().toSet()
+        val importedIds = entities.map { it.id }
 
         val newWords = entities.filter { it.id !in existingIds }
         val existingWords = entities.filter { it.id in existingIds }
@@ -135,6 +141,11 @@ class WordRepository(
             )
         }
 
+        wordDao.deleteWordsByPatternExcept(
+            idPattern = DEFAULT_WORD_ID_PATTERN,
+            wordIds = importedIds
+        )
+
         return entities.size
     }
 
@@ -143,11 +154,19 @@ class WordRepository(
     }
 
     suspend fun clearDictionary() {
-        wordDao.clearWords()
+        wordDao.deleteWordsByPattern(DEFAULT_WORD_ID_PATTERN)
     }
 
     suspend fun countAllWords(): Int {
         return wordDao.countAllWords()
+    }
+
+    suspend fun countDefaultWords(): Int {
+        return wordDao.countWordsByPattern(DEFAULT_WORD_ID_PATTERN)
+    }
+
+    suspend fun countCustomWords(): Int {
+        return wordDao.countWordsByPattern(CUSTOM_WORD_ID_PATTERN)
     }
 
     suspend fun countEnabledWords(): Int {
@@ -164,6 +183,35 @@ class WordRepository(
 
     suspend fun setWordEnabled(wordId: String, enabled: Boolean) {
         wordDao.setWordEnabled(wordId, enabled)
+    }
+
+    suspend fun addCustomWord(
+        text: String,
+        difficulty: String,
+        enabled: Boolean
+    ): Boolean {
+        val normalizedText = text.trim().lowercase()
+        if (normalizedText.isBlank()) {
+            return false
+        }
+
+        if (wordDao.getWordByText(language = "ru", text = normalizedText) != null) {
+            return false
+        }
+
+        wordDao.insertWord(
+            WordEntity(
+                id = "custom:$normalizedText",
+                text = normalizedText,
+                language = "ru",
+                difficulty = difficulty,
+                category = "custom",
+                enabled = enabled,
+                source = "user"
+            )
+        )
+
+        return true
     }
 
     suspend fun enableWordsByDifficulty(difficulties: List<String>) {
@@ -188,8 +236,14 @@ class WordRepository(
 
         val metaDao = AppDatabase.getInstance(context).dictionaryMetaDao()
         val existing = metaDao.getMeta(dictionary.dictionaryId)
+        val importedIds = wordDao.getWordIdsByPattern(DEFAULT_WORD_ID_PATTERN).toSet()
+        val bundledIds = dictionary.words.map { it.id }.toSet()
 
-        if (existing != null && existing.version >= dictionary.version) {
+        if (
+            existing != null &&
+            existing.version >= dictionary.version &&
+            importedIds == bundledIds
+        ) {
             return "Dictionary is up to date (v${existing.version})"
         }
 

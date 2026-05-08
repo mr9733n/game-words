@@ -128,7 +128,7 @@ fun SettingsScreen(
                 onClick = onClearDictionaryClicked,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Clear Dictionary")
+                Text("Clear Default Dictionary")
             }
 
             Spacer(modifier = Modifier.height(8.dp))

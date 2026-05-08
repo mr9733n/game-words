@@ -57,8 +57,11 @@ fun SummaryScreen(
                             .padding(vertical = 4.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text("Team ${index + 1}")
-                        Text(team.score.toString(), fontWeight = FontWeight.Bold)
+                        Text(team.name)
+                        Text(
+                            text = "${team.score - team.skippedCount} (${team.score} - ${team.skippedCount})",
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
             }

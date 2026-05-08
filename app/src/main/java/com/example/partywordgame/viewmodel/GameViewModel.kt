@@ -16,12 +16,17 @@ import com.example.partywordgame.models.GameRecord
 import com.example.partywordgame.models.GameStatus
 import com.example.partywordgame.models.TeamScore
 import com.example.partywordgame.models.UsedWordRecord
+import com.example.partywordgame.models.Word
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class GameViewModel(application: Application) : AndroidViewModel(application) {
+    companion object {
+        const val MAX_SKIPS_PER_TURN = 3
+    }
+
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
 
@@ -238,6 +243,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             try {
                 val total = wordRepository.countAllWords()
+                val defaultWords = wordRepository.countDefaultWords()
+                val customWords = wordRepository.countCustomWords()
+                val otherWords = total - defaultWords - customWords
                 val enabled = wordRepository.countEnabledWords()
                 val disabled = wordRepository.countDisabledWords()
                 val active = persistence.getActiveWords().size
@@ -246,6 +254,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                 Dictionary Info
 
                 Total words: $total
+                Default words: $defaultWords
+                Custom words: $customWords
+                Other words: $otherWords
                 Enabled: $enabled
                 Disabled: $disabled
                 Active words: $active
@@ -351,7 +362,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                 teams = updatedTeams,
                 wordBulk = updatedWords,
                 current = currentState.current.copy(
-                    skippedWordIdsInTurn = emptyList()
+                    skippedWordIdsInTurn = emptyList(),
+                    skipCountInTurn = 0
                 )
             )
 
@@ -417,6 +429,66 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         _isTimerRunning.value = false
     }
 
+    fun markWordAsMissed() {
+        val currentState = _gameState.value ?: return
+
+        val currentWordIndex = currentState.current.wordIndex
+        val currentWord = currentState.wordBulk[currentWordIndex]
+        val skippedIds = (
+                currentState.current.skippedWordIdsInTurn + currentWord.id
+                ).distinct()
+
+        val updatedWords = currentState.wordBulk.toMutableList().apply {
+            this[currentWordIndex] = this[currentWordIndex].copy(
+                state = WordState.AVAILABLE
+            )
+        }
+
+        val nextWordIndex = findNextWordIndex(
+            words = updatedWords,
+            currentWordIndex = currentWordIndex,
+            skippedIds = skippedIds
+        )
+
+        if (nextWordIndex == null) {
+            val newState = currentState.copy(
+                wordBulk = updatedWords,
+                current = currentState.current.copy(
+                    skippedWordIdsInTurn = skippedIds
+                )
+            )
+
+            _gameState.value = newState
+
+            viewModelScope.launch {
+                persistence.saveGameState(newState)
+            }
+
+            finishCurrentTurn()
+            return
+        }
+
+        val finalWords = updatedWords.toMutableList().apply {
+            this[nextWordIndex] = this[nextWordIndex].copy(
+                state = WordState.IN_TURN
+            )
+        }
+
+        val newState = currentState.copy(
+            wordBulk = finalWords,
+            current = currentState.current.copy(
+                wordIndex = nextWordIndex,
+                skippedWordIdsInTurn = skippedIds
+            )
+        )
+
+        _gameState.value = newState
+
+        viewModelScope.launch {
+            persistence.saveGameState(newState)
+        }
+    }
+
     fun restartRound() {
         val currentState = _gameState.value ?: return
 
@@ -429,7 +501,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             current = currentState.current.copy(
                 teamIndex = 0,
                 wordIndex = 0,
-                skippedWordIdsInTurn = emptyList()
+                skippedWordIdsInTurn = emptyList(),
+                skipCountInTurn = 0
             )
         )
 
@@ -467,7 +540,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             val roundFinishedState = currentState.copy(
                 wordBulk = cleanedWords,
                 current = currentState.current.copy(
-                    skippedWordIdsInTurn = emptyList()
+                    skippedWordIdsInTurn = emptyList(),
+                    skipCountInTurn = 0
                 )
             )
 
@@ -491,7 +565,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             current = currentState.current.copy(
                 teamIndex = nextTeamIndex,
                 wordIndex = nextWordIndex,
-                skippedWordIdsInTurn = emptyList()
+                skippedWordIdsInTurn = emptyList(),
+                skipCountInTurn = 0
             )
         )
 
@@ -534,7 +609,10 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         val resetTeams = currentState.teams.map {
-            it.copy(roundScore = 0)
+            it.copy(
+                roundScore = 0,
+                roundSkippedCount = 0
+            )
         }
 
         val newState = currentState.copy(
@@ -544,7 +622,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                 round = currentState.current.round + 1,
                 teamIndex = nextRoundStartingTeamIndex,
                 wordIndex = 0,
-                skippedWordIdsInTurn = emptyList()
+                skippedWordIdsInTurn = emptyList(),
+                skipCountInTurn = 0
             )
         )
 
@@ -560,12 +639,25 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     fun skipWord() {
         val currentState = _gameState.value ?: return
 
+        if (currentState.current.skipCountInTurn >= MAX_SKIPS_PER_TURN) {
+            _errorMessage.value = "Skip limit reached for this turn."
+            return
+        }
+
         val currentWordIndex = currentState.current.wordIndex
         val currentWord = currentState.wordBulk[currentWordIndex]
+        val currentTeamIndex = currentState.current.teamIndex
 
         val skippedIds = (
                 currentState.current.skippedWordIdsInTurn + currentWord.id
                 ).distinct()
+
+        val updatedTeams = currentState.teams.toMutableList().apply {
+            this[currentTeamIndex] = this[currentTeamIndex].copy(
+                skippedCount = this[currentTeamIndex].skippedCount + 1,
+                roundSkippedCount = this[currentTeamIndex].roundSkippedCount + 1
+            )
+        }
 
         val updatedWords = currentState.wordBulk.toMutableList().apply {
             this[currentWordIndex] = this[currentWordIndex].copy(
@@ -573,21 +665,19 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             )
         }
 
-        val nextWordIndex = updatedWords
-            .mapIndexedNotNull { index, word ->
-                if (
-                    word.state != WordState.GUESSED &&
-                    word.id !in skippedIds &&
-                    index != currentWordIndex
-                ) index else null
-            }
-            .randomOrNull()
+        val nextWordIndex = findNextWordIndex(
+            words = updatedWords,
+            currentWordIndex = currentWordIndex,
+            skippedIds = skippedIds
+        )
 
         if (nextWordIndex == null) {
             val newState = currentState.copy(
+                teams = updatedTeams,
                 wordBulk = updatedWords,
                 current = currentState.current.copy(
-                    skippedWordIdsInTurn = skippedIds
+                    skippedWordIdsInTurn = skippedIds,
+                    skipCountInTurn = currentState.current.skipCountInTurn + 1
                 )
             )
 
@@ -608,10 +698,12 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         val newState = currentState.copy(
+            teams = updatedTeams,
             wordBulk = finalWords,
             current = currentState.current.copy(
                 wordIndex = nextWordIndex,
-                skippedWordIdsInTurn = skippedIds
+                skippedWordIdsInTurn = skippedIds,
+                skipCountInTurn = currentState.current.skipCountInTurn + 1
             )
         )
 
@@ -629,8 +721,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             status = GameStatus.FINISHED
         )
 
-        val maxScore = finalState.teams.maxOfOrNull { it.score } ?: 0
-        val winners = finalState.teams.filter { it.score == maxScore }
+        val maxScore = finalState.teams.maxOfOrNull { it.score - it.skippedCount } ?: 0
+        val winners = finalState.teams.filter { it.score - it.skippedCount == maxScore }
 
         val record = GameRecord(
             id = finalState.gameId,
@@ -640,7 +732,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             scores = finalState.teams.map {
                 TeamScore(
                     teamName = it.name,
-                    score = it.score
+                    score = it.score,
+                    skippedCount = it.skippedCount,
+                    netScore = it.score - it.skippedCount
                 )
             },
             usedWords = finalState.wordBulk.map {
@@ -665,6 +759,22 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             _records.value = persistence.getGameRecords()
         }
         _screenState.value = ScreenState.FINAL
+    }
+
+    private fun findNextWordIndex(
+        words: List<Word>,
+        currentWordIndex: Int,
+        skippedIds: List<String>
+    ): Int? {
+        return words
+            .mapIndexedNotNull { index, word ->
+                if (
+                    word.state != WordState.GUESSED &&
+                    word.id !in skippedIds &&
+                    index != currentWordIndex
+                ) index else null
+            }
+            .randomOrNull()
     }
 
     private fun startTimer() {
@@ -742,6 +852,29 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             } catch (e: Exception) {
                 e.printStackTrace()
                 _errorMessage.value = "Failed to update word: ${e.message ?: "unknown error"}"
+            }
+        }
+    }
+
+    fun addCustomWord(text: String, difficulty: String, enabled: Boolean) {
+        viewModelScope.launch {
+            try {
+                val added = wordRepository.addCustomWord(
+                    text = text,
+                    difficulty = difficulty,
+                    enabled = enabled
+                )
+
+                if (added) {
+                    _errorMessage.value = "Word added"
+                    searchWords(text.trim())
+                } else {
+                    _errorMessage.value = "Word already exists or is empty"
+                    searchWords(_wordSearchQuery.value)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.value = "Failed to add word: ${e.message ?: "unknown error"}"
             }
         }
     }

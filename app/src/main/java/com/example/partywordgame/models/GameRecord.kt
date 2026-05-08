@@ -15,7 +15,9 @@ data class GameRecord(
 @Serializable
 data class TeamScore(
     val teamName: String,
-    val score: Int
+    val score: Int,
+    val skippedCount: Int = 0,
+    val netScore: Int = score - skippedCount
 )
 
 @Serializable

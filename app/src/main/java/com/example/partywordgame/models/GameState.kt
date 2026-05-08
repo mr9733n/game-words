@@ -17,7 +17,8 @@ data class CurrentTurn(
     val round: Int,
     val teamIndex: Int,
     val wordIndex: Int,
-    val skippedWordIdsInTurn: List<String> = emptyList()
+    val skippedWordIdsInTurn: List<String> = emptyList(),
+    val skipCountInTurn: Int = 0
 )
 
 enum class GameStatus {

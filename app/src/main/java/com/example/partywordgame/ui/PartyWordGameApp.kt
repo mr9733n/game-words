@@ -67,6 +67,9 @@ fun PartyWordGameApp(
             onBackClicked = { viewModel.showSettingsScreen() },
             showDisabledWords = showDisabledWords,
             onToggleShowDisabledWords = { viewModel.toggleShowDisabledWords() },
+            onAddWord = { text, difficulty, enabled ->
+                viewModel.addCustomWord(text, difficulty, enabled)
+            },
         )
 
         ScreenState.SETUP -> SetupScreen(
@@ -83,11 +86,12 @@ fun PartyWordGameApp(
                     isTimerRunning = isTimerRunning,
                     onStartTurn = { viewModel.startTurn() },
                     onGuessed = { viewModel.markWordAsGuessed() },
-                    onNotGuessed = { viewModel.skipWord() },
+                    onNotGuessed = { viewModel.markWordAsMissed() },
                     onNextWord = { viewModel.skipWord() },
                     onPause = { viewModel.pauseGame() },
                     onRestartRound = { viewModel.restartRound() },
-                    onRestartGame = { viewModel.restartGame() }
+                    onRestartGame = { viewModel.restartGame() },
+                    maxSkipsPerTurn = GameViewModel.MAX_SKIPS_PER_TURN
                 )
             }
         }

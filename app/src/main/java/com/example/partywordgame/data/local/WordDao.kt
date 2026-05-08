@@ -49,6 +49,12 @@ interface WordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWords(words: List<WordEntity>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertWord(word: WordEntity)
+
+    @Query("SELECT * FROM words WHERE language = :language AND text = :text LIMIT 1")
+    suspend fun getWordByText(language: String, text: String): WordEntity?
+
     @Query("SELECT COUNT(*) FROM words WHERE enabled = 0")
     suspend fun countDisabledWords(): Int
 
@@ -73,11 +79,23 @@ interface WordDao {
     @Query("SELECT COUNT(*) FROM words")
     suspend fun countAllWords(): Int
 
+    @Query("SELECT COUNT(*) FROM words WHERE id LIKE :idPattern")
+    suspend fun countWordsByPattern(idPattern: String): Int
+
     @Query("SELECT COUNT(*) FROM words WHERE enabled = 1")
     suspend fun countEnabledWords(): Int
 
     @Query("SELECT id FROM words")
     suspend fun getAllWordIds(): List<String>
+
+    @Query("SELECT id FROM words WHERE id LIKE :idPattern")
+    suspend fun getWordIdsByPattern(idPattern: String): List<String>
+
+    @Query("DELETE FROM words WHERE id LIKE :idPattern")
+    suspend fun deleteWordsByPattern(idPattern: String)
+
+    @Query("DELETE FROM words WHERE id LIKE :idPattern AND id NOT IN (:wordIds)")
+    suspend fun deleteWordsByPatternExcept(idPattern: String, wordIds: List<String>)
 
     @Query("""
     UPDATE words
